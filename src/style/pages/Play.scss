@@ -1,0 +1,10 @@
+.Play {
+  h1 {
+    color: #fdd36a;
+    text-align: center;
+    padding: 10%;
+    .text {
+      @include heading();
+    }
+  }
+}
