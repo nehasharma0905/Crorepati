@@ -1,0 +1,26 @@
+.LeaderBoard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  h1 {
+    color: #fdd36a;
+    text-align: center;
+    padding: 3%;
+  }
+  .LeaderBoardBox {
+    height: 80vh;
+    width: 70%;
+    background: #2e335a;
+    border-radius: 10px;
+    border: solid 3px #fdd36a;
+    &:hover {
+      box-shadow: 5px 5px 10px #fdd36a;
+    }
+    h2 {
+      color: #fdd36a;
+      text-align: center;
+      padding: 3%;
+    }
+  }
+}

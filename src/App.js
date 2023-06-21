@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import Play from "./pages/Play";
 import Login from "./pages/Login";
 import Quiz from "./pages/Quiz";
+import Challenge from "./pages/Challenge";
 import "./style/global.scss";
 import LeaderBoard from "./pages/LeaderBoard";
 
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<Play />} />
         <Route path="login" element={<Login />} />
         <Route path="quiz" element={<Quiz />} />
+        <Route path="challenge" element={<Challenge />} />
         <Route path="leaderboard" element={<LeaderBoard />} />
       </Routes>
     </div>

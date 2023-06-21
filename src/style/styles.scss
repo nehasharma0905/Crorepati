@@ -1,10 +1,19 @@
 @import "./pages/Play.scss";
 @import "./global.scss";
-
+@import "./pages/Login.scss";
+@import "./pages/Challenge.scss";
+@import "./pages/LeaderBoard.scss";
+@import "./components/SignUpBox.scss";
+@import "./components/Button.scss";
+@import "./pages/Quiz.scss";
 * {
-  background-image: url("../Data/Rectangle\ 1.png");
-  background-size: cover;
   box-sizing: border-box;
   margin: 0px;
   padding: 0px;
+}
+.App {
+  background-image: url("../Data/Rectangle\ 1.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 100vh;
 }
