@@ -12,6 +12,9 @@
     p {
       color: #fdd36a;
       margin-bottom: 20px;
+      &:hover {
+        cursor: pointer;
+      }
     }
     .para1 {
       color: white;
@@ -40,12 +43,13 @@
       background: #fdd36a;
       border-radius: 20px;
       text-align: center;
+      border: 2px solid #2e335a;
       &:hover {
         box-shadow: 5px 5px 10px #fdd36a;
         cursor: pointer;
       }
     }
-    a {
+    p {
       color: #fdd36a;
       &:hover {
         cursor: pointer;

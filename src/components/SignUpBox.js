@@ -11,9 +11,9 @@ const SignUpBox = (props) => {
           <input placeholder={props.data2} />
         ) : null}
         <input placeholder={props.data3} />
-        <button>{props.title}</button>
+        <button onClick={props.buttonClicked}>{props.title}</button>
         <p className="para1">{props.para1}</p>
-        <a>{props.para2}</a>
+        <p onClick={props.modeChange}>{props.para2}</p>
       </div>
     </div>
   );

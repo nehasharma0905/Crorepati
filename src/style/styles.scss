@@ -1,11 +1,12 @@
 @import "./pages/Play.scss";
-@import "./global.scss";
+@import "global.scss";
 @import "./pages/Login.scss";
 @import "./pages/Challenge.scss";
 @import "./pages/LeaderBoard.scss";
 @import "./components/SignUpBox.scss";
 @import "./components/Button.scss";
 @import "./pages/Quiz.scss";
+
 * {
   box-sizing: border-box;
   margin: 0px;

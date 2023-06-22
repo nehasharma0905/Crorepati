@@ -7,6 +7,7 @@ import Quiz from "./pages/Quiz";
 import Challenge from "./pages/Challenge";
 import "./style/global.scss";
 import LeaderBoard from "./pages/LeaderBoard";
+import { useState } from "react";
 
 function App() {
   return (
