@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import { createUser, loginUser } from "../APIcalls/Authentication";
 import SignUpBox from "../components/SignUpBox";
-
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { Context } from "../components/context";
 const Login = () => {
+  const navigate = useNavigate();
+  const { username, setUsername } = useContext(Context);
   const [mode, setMode] = useState("Login");
-  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -27,9 +30,13 @@ const Login = () => {
     console.log("useeffect run");
   }, [mode]);
 
-  const handleLoginHandler = async() => {
-    const {data} = await loginUser(username, password);
-  }
+  const handleLoginHandler = async () => {
+    const { data } = await loginUser(username, password);
+    if (data.authStatus) {
+      navigate("/quiz");
+    }
+    console.log("data", data);
+  };
 
   return (
     <div className="Login">

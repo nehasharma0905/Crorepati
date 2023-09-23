@@ -6,17 +6,20 @@ import Login from "./pages/Login";
 import Quiz from "./pages/Quiz";
 import Challenge from "./pages/Challenge";
 import LeaderBoard from "./pages/LeaderBoard";
+import { ContextProvider } from "./components/context";
 
 function App() {
   return (
     <div className="App">
-      <Routes>
-        <Route path="/" element={<Play />} />
-        <Route path="login" element={<Login />} />
-        <Route path="quiz" element={<Quiz />} />
-        <Route path="challenge" element={<Challenge />} />
-        <Route path="leaderboard" element={<LeaderBoard />} />
-      </Routes>
+      <ContextProvider>
+        <Routes>
+          <Route path="/" element={<Play />} />
+          <Route path="login" element={<Login />} />
+          <Route path="quiz" element={<Quiz />} />
+          <Route path="challenge" element={<Challenge />} />
+          <Route path="leaderboard" element={<LeaderBoard />} />
+        </Routes>
+      </ContextProvider>
     </div>
   );
 }

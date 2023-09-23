@@ -60,6 +60,10 @@
         &:hover {
           cursor: pointer;
         }
+        &.active {
+          background-color: #fdd36a;
+          color: #2e335a;
+        }
       }
     }
     .buton {

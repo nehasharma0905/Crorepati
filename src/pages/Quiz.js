@@ -3,8 +3,53 @@ import { HiUserGroup } from "react-icons/hi";
 import { TbSwitch3 } from "react-icons/tb";
 import { BsPersonVcardFill } from "react-icons/bs";
 import Countdown from "react-countdown";
+import { generateQuiz, lockAnswer } from "../APIcalls/Authentication";
+import { useContext, useEffect, useState } from "react";
+import { Context } from "../components/context";
+import { getQuestionByID } from "../APIcalls/Authentication";
 
 const Quiz = () => {
+  const { username, quizData, setQuizData } = useContext(Context);
+  const [questionIdList, setQuestionIdList] = useState(null);
+  const [count, setCount] = useState(0);
+  const [questionData, setQuestionData] = useState(null);
+  const [answer, setAnswer] = useState(null);
+  const [score, setScore] = useState(0);
+  const [gameState, setGameState] = useState(true);
+  const quizHandler = async () => {
+    const { data } = await generateQuiz(username);
+    console.log(data);
+    setQuizData(data.data);
+    setQuestionIdList([...data.data.questions]);
+    console.log("questionIdList", questionIdList);
+  };
+
+  const question = async (questionId) => {
+    const { data } = await getQuestionByID(questionId);
+    setQuestionData(data.data);
+    console.log("questionData", data);
+  };
+
+  const lockAns = async () => {
+    const quizId = quizData.quizId;
+    const questionId = questionIdList[count].questionId;
+    const answerId = answer.id;
+    const earnedScore = 10;
+    console.log("ans", answer);
+
+    const { data } = await lockAnswer(
+      quizId,
+      questionId,
+      answerId,
+      earnedScore
+    );
+    if (data.data.isCorrect) {
+      setCount(count + 1);
+      setScore(data.data.totalScore);
+    } else {
+      setGameState(false);
+    }
+  };
   // Random component
   const Completionist = () => <span>Game Over!</span>;
 
@@ -22,6 +67,19 @@ const Quiz = () => {
       );
     }
   };
+  const setAnswerHandler = (e) => {
+    setAnswer(e);
+    console.log("answer", e, e.text);
+  };
+  useEffect(() => {
+    quizHandler();
+  }, []);
+
+  useEffect(() => {
+    if (questionIdList !== null && count < questionIdList.length) {
+      question(questionIdList[count].questionId);
+    }
+  }, [count, questionIdList]);
 
   return (
     <div className="Quiz">
@@ -93,21 +151,25 @@ const Quiz = () => {
       </div>
       <div className="question">
         <div className="questionNo">
-          <p>Question 02</p>
+          <p>Question {count + 1}</p>
           <div>
             <Countdown date={Date.now() + 30000} renderer={renderer} />
           </div>
         </div>
-        <p className="ques">Who composed the Indian National Anthem?</p>
+        <p className="ques">{questionData?.question}</p>
         <div className="option">
-          <div>A)Indian National Anthem</div>
-          <div>A)Indian National Anthem</div>
-          <div>A)Indian National Anthem</div>
-          <div>A)Indian National Anthem</div>
+          {questionData?.options.map((option) => (
+            <div
+              className={`${answer.id === option.id ? "active" : ""}`}
+              onClick={() => setAnswerHandler(option)}
+            >
+              {option.text}
+            </div>
+          ))}
         </div>
         <div className="buton">
           <button>Quit</button>
-          <button>Lock Answer</button>
+          <button onClick={lockAns}>Lock Answer</button>
         </div>
       </div>
       <div className="options">
@@ -151,7 +213,7 @@ const Quiz = () => {
         <h2>You have currently won</h2>
         <h1>
           <BsCurrencyRupee />
-          5000
+          {score}
         </h1>
       </div>
     </div>
