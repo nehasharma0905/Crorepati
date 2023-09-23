@@ -24,7 +24,7 @@ const SignUpBox = (props) => {
           />
         ) : null}
 
-        <button onClick={props.buttonClicked}>{props.title}</button>
+        <button onClick={()=>props.buttonClicked()}>{props.title}</button>
         <p className="para1">{props.para1}</p>
         <p onClick={props.modeChange}>{props.para2}</p>
       </div>

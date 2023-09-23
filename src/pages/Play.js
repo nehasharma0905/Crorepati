@@ -1,4 +1,4 @@
-import Button from "../components/Button";
+import Button from "../components/CustomButton";
 import { useNavigate } from "react-router-dom";
 const Play = () => {
   const navigate = useNavigate();

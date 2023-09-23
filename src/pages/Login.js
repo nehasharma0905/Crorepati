@@ -27,6 +27,10 @@ const Login = () => {
     console.log("useeffect run");
   }, [mode]);
 
+  const handleLoginHandler = async() => {
+    const {data} = await loginUser(username, password);
+  }
+
   return (
     <div className="Login">
       <h1>KBC</h1>
@@ -43,7 +47,7 @@ const Login = () => {
           password={password}
           confirmPassword={confirmPassword}
           takeInput={readinput}
-          buttonClicked={loginUser}
+          buttonClicked={handleLoginHandler}
           modeChange={() => setMode("SignUp")}
         />
       ) : (

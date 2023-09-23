@@ -2,7 +2,6 @@ import { BsCurrencyRupee } from "react-icons/bs";
 import { HiUserGroup } from "react-icons/hi";
 import { TbSwitch3 } from "react-icons/tb";
 import { BsPersonVcardFill } from "react-icons/bs";
-import { ReactDOM } from "react";
 import Countdown from "react-countdown";
 
 const Quiz = () => {
