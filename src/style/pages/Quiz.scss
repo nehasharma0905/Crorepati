@@ -57,6 +57,9 @@
         border-radius: 5px;
         display: flex;
         justify-content: center;
+        &:hover {
+          cursor: pointer;
+        }
       }
     }
     .buton {
@@ -71,6 +74,7 @@
         font-weight: 700;
         background: #fdd36a;
         border-radius: 20px;
+        border: 2px solid #2e335a;
         text-align: center;
         &:hover {
           box-shadow: 5px 5px 10px #fdd36a;
@@ -91,7 +95,7 @@
       button {
         width: 120px;
         height: 40px;
-
+        border: 2px solid #2e335a;
         color: black;
         font-weight: 700;
         background: #fdd36a;
@@ -117,7 +121,7 @@
         button {
           width: 100px;
           height: 40px;
-
+          border: 2px solid #2e335a;
           color: black;
           font-weight: 700;
           background: #fdd36a;

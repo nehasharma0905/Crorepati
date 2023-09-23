@@ -3,6 +3,7 @@
   height: 40px;
   margin-bottom: 30px;
   button {
+    @include normalText();
     height: 100%;
     width: 100%;
     color: white;
@@ -11,6 +12,7 @@
     border: solid 3px #fdd36a;
     &:hover {
       box-shadow: 5px 5px 10px #fdd36a;
+      cursor: pointer;
     }
   }
 }

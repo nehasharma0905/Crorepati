@@ -4,41 +4,42 @@
   align-items: center;
   justify-content: center;
   h1 {
+    @include heading();
     color: #fdd36a;
     text-align: center;
-    padding: 3%;
-    margin-top: 2%;
+    padding: 70px;
   }
-  .challengebox {
-    display: flex;
-    flex-direction: column;
-    background-color: #2e335a;
-    padding: 20px 80px;
-    align-items: center;
-    justify-content: center;
-    border: solid 3px #fdd36a;
-    border-radius: 8px;
-    .para1 {
-      color: #fdd36a;
-      margin-bottom: 20px;
-    }
-    .para2 {
-      color: white;
-      margin-bottom: 20px;
-    }
-    button {
-      width: 120px;
-      height: 40px;
-      margin: 10px;
-      color: black;
-      font-weight: 700;
-      background: #fdd36a;
-      border-radius: 20px;
-      text-align: center;
-      &:hover {
-        box-shadow: 5px 5px 10px #fdd36a;
-        cursor: pointer;
-      }
+}
+.challengebox {
+  display: flex;
+  flex-direction: column;
+  background-color: #2e335a;
+  padding: 20px 80px;
+  align-items: center;
+  justify-content: center;
+  border: solid 3px #fdd36a;
+  border-radius: 8px;
+  .para1 {
+    color: #fdd36a;
+    margin-bottom: 20px;
+  }
+  .para2 {
+    color: white;
+    margin-bottom: 20px;
+  }
+  button {
+    width: 120px;
+    height: 40px;
+    margin: 10px;
+    color: black;
+    font-weight: 700;
+    background: #fdd36a;
+    border-radius: 20px;
+    border: 2px solid #2e335a;
+    text-align: center;
+    &:hover {
+      box-shadow: 5px 5px 10px #fdd36a;
+      cursor: pointer;
     }
   }
 }

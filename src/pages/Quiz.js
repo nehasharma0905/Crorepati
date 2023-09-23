@@ -2,7 +2,28 @@ import { BsCurrencyRupee } from "react-icons/bs";
 import { HiUserGroup } from "react-icons/hi";
 import { TbSwitch3 } from "react-icons/tb";
 import { BsPersonVcardFill } from "react-icons/bs";
+import { ReactDOM } from "react";
+import Countdown from "react-countdown";
+
 const Quiz = () => {
+  // Random component
+  const Completionist = () => <span>Game Over!</span>;
+
+  // Renderer callback with condition
+  const renderer = ({ minutes, seconds, completed }) => {
+    if (completed) {
+      // Render a complete state
+      return <Completionist />;
+    } else {
+      // Render a countdown
+      return (
+        <span>
+          {minutes}:{seconds}
+        </span>
+      );
+    }
+  };
+
   return (
     <div className="Quiz">
       <div className="amount">
@@ -74,7 +95,9 @@ const Quiz = () => {
       <div className="question">
         <div className="questionNo">
           <p>Question 02</p>
-          <div>00:45</div>
+          <div>
+            <Countdown date={Date.now() + 30000} renderer={renderer} />
+          </div>
         </div>
         <p className="ques">Who composed the Indian National Anthem?</p>
         <div className="option">

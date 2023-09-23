@@ -4,8 +4,9 @@
   align-items: center;
   justify-content: center;
   h1 {
+    @include heading();
     color: #fdd36a;
     text-align: center;
-    padding: 10%;
+    padding: 100px;
   }
 }

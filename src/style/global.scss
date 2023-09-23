@@ -1,4 +1,4 @@
-@mixin heading($fontSize: 22px, $fontWeight: 600) {
+@mixin heading($fontSize: 35px, $fontWeight: 600) {
   font-family: "Nunito", sans-serif;
   font-weight: $fontWeight;
   font-size: $fontSize;
