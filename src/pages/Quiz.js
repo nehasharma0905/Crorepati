@@ -7,9 +7,15 @@ import { generateQuiz, lockAnswer } from "../APIcalls/Authentication";
 import { useContext, useEffect, useState } from "react";
 import { Context } from "../components/context";
 import { getQuestionByID } from "../APIcalls/Authentication";
+import GameOverModal from "../components/GameOverModal";
 
 const Quiz = () => {
-  const { username, quizData, setQuizData } = useContext(Context);
+  const amountWon = [
+    1000, 2000, 3000, 5000, 10000, 20000, 40000, 80000, 160000, 320000, 640000,
+    1250000, 2500000, 5000000, 10000000, 70000000,
+  ];
+  const { username, quizData, setQuizData, setOpenGameOver } =
+    useContext(Context);
   const [questionIdList, setQuestionIdList] = useState(null);
   const [count, setCount] = useState(0);
   const [questionData, setQuestionData] = useState(null);
@@ -48,6 +54,7 @@ const Quiz = () => {
       setScore(data.data.totalScore);
     } else {
       setGameState(false);
+      setOpenGameOver(true);
     }
   };
   // Random component
@@ -83,6 +90,7 @@ const Quiz = () => {
 
   return (
     <div className="Quiz">
+      <GameOverModal />
       <div className="amount">
         <p>
           <BsCurrencyRupee />
@@ -153,14 +161,20 @@ const Quiz = () => {
         <div className="questionNo">
           <p>Question {count + 1}</p>
           <div>
-            <Countdown date={Date.now() + 30000} renderer={renderer} />
+            <Countdown
+              date={Date.now() + 30000}
+              renderer={renderer}
+              onComplete={() => {
+                setOpenGameOver(true);
+              }}
+            />
           </div>
         </div>
         <p className="ques">{questionData?.question}</p>
         <div className="option">
           {questionData?.options.map((option) => (
             <div
-              className={`${answer.id === option.id ? "active" : ""}`}
+              className={`${answer?.id === option.id ? "active" : ""}`}
               onClick={() => setAnswerHandler(option)}
             >
               {option.text}
@@ -173,10 +187,6 @@ const Quiz = () => {
         </div>
       </div>
       <div className="options">
-        <div className="buttons">
-          <button>English</button>
-          <button>Hindi</button>
-        </div>
         <p>Life Lines</p>
         <ul>
           <li>
@@ -184,14 +194,7 @@ const Quiz = () => {
               Fifty-Fifty <button>50:50</button>
             </div>
           </li>
-          <li>
-            <div>
-              Audience Poll
-              <button>
-                <HiUserGroup />
-              </button>
-            </div>
-          </li>
+
           <li>
             <div>
               Flip the question

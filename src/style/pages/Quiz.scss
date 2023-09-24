@@ -94,23 +94,6 @@
     border: 1px solid #fdd36a;
     border-radius: 5px;
 
-    .buttons {
-      padding: 30px 20px;
-      button {
-        width: 120px;
-        height: 40px;
-        border: 2px solid #2e335a;
-        color: black;
-        font-weight: 700;
-        background: #fdd36a;
-        border-radius: 20px;
-        text-align: center;
-        &:hover {
-          box-shadow: 5px 5px 10px #fdd36a;
-          cursor: pointer;
-        }
-      }
-    }
     p {
       color: white;
       text-align: center;

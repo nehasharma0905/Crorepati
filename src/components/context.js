@@ -8,9 +8,19 @@ export const Context = createContext();
 export function ContextProvider({ children }) {
   const [username, setUsername] = useState("random_1000");
   const [quizData, setQuizData] = useState({});
+  const [openGameOver, setOpenGameOver] = useState(false);
 
   return (
-    <Context.Provider value={{ username, setUsername, quizData, setQuizData }}>
+    <Context.Provider
+      value={{
+        username,
+        setUsername,
+        quizData,
+        setQuizData,
+        openGameOver,
+        setOpenGameOver,
+      }}
+    >
       {children}
     </Context.Provider>
   );
