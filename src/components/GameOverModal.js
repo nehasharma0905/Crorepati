@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { Context } from "./context";
 import { useContext } from "react";
+import GameOverImage from "../Data/GameOverImage.png";
 
 const style = {
   position: "absolute",
@@ -28,14 +29,14 @@ export default function GameOverModal() {
 
   return (
     <Modal
+      className="modal"
       open={openGameOver}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
       <Box className="gameoverbox" sx={style}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          Game Over
-        </Typography>
+        <img className="gameoverimage" src={GameOverImage} />
+
         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
           You have won X.
         </Typography>

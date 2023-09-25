@@ -14,6 +14,7 @@ const Quiz = () => {
     1000, 2000, 3000, 5000, 10000, 20000, 40000, 80000, 160000, 320000, 640000,
     1250000, 2500000, 5000000, 10000000, 70000000,
   ];
+  const reversedArrayAmountWon = [...amountWon].reverse();
   const { username, quizData, setQuizData, setOpenGameOver } =
     useContext(Context);
   const [questionIdList, setQuestionIdList] = useState(null);
@@ -21,7 +22,7 @@ const Quiz = () => {
   const [questionData, setQuestionData] = useState(null);
   const [answer, setAnswer] = useState(null);
   const [score, setScore] = useState(0);
-  const [gameState, setGameState] = useState(true);
+
   const quizHandler = async () => {
     const { data } = await generateQuiz(username);
     console.log(data);
@@ -40,7 +41,7 @@ const Quiz = () => {
     const quizId = quizData.quizId;
     const questionId = questionIdList[count].questionId;
     const answerId = answer.id;
-    const earnedScore = 10;
+    const earnedScore = amountWon[count];
     console.log("ans", answer);
 
     const { data } = await lockAnswer(
@@ -51,9 +52,8 @@ const Quiz = () => {
     );
     if (data.data.isCorrect) {
       setCount(count + 1);
-      setScore(data.data.totalScore);
+      setScore(amountWon[count]);
     } else {
-      setGameState(false);
       setOpenGameOver(true);
     }
   };
@@ -92,70 +92,12 @@ const Quiz = () => {
     <div className="Quiz">
       <GameOverModal />
       <div className="amount">
-        <p>
-          <BsCurrencyRupee />
-          100000000
-        </p>
-        <p>
-          <BsCurrencyRupee />
-          80000000
-        </p>
-        <p>
-          <BsCurrencyRupee />
-          40000000
-        </p>
-        <p>
-          <BsCurrencyRupee />
-          20000000
-        </p>
-        <p>
-          <BsCurrencyRupee />
-          10000000
-        </p>
-        <p>
-          <BsCurrencyRupee />
-          5000000
-        </p>
-        <p>
-          <BsCurrencyRupee />
-          2500000
-        </p>
-        <p>
-          <BsCurrencyRupee />
-          1250000
-        </p>
-        <p>
-          <BsCurrencyRupee />
-          640000
-        </p>
-        <p>
-          <BsCurrencyRupee />
-          320000
-        </p>
-        <p>
-          <BsCurrencyRupee />
-          160000
-        </p>
-        <p>
-          <BsCurrencyRupee />
-          80000
-        </p>
-        <p>
-          <BsCurrencyRupee />
-          40000
-        </p>
-        <p>
-          <BsCurrencyRupee />
-          20000
-        </p>
-        <p>
-          <BsCurrencyRupee />
-          10000
-        </p>
-        <p>
-          <BsCurrencyRupee />
-          5000
-        </p>
+        {reversedArrayAmountWon.map((amount) => (
+          <p>
+            <BsCurrencyRupee />
+            {amount}
+          </p>
+        ))}
       </div>
       <div className="question">
         <div className="questionNo">
