@@ -1,9 +1,13 @@
 import { BsCurrencyRupee } from "react-icons/bs";
-import { HiUserGroup } from "react-icons/hi";
 import { TbSwitch3 } from "react-icons/tb";
 import { BsPersonVcardFill } from "react-icons/bs";
 import Countdown from "react-countdown";
-import { generateQuiz, lockAnswer } from "../APIcalls/Authentication";
+import {
+  generateQuiz,
+  lockAnswer,
+  useLifeLine,
+  useLifeLineAPI,
+} from "../APIcalls/Authentication";
 import { useContext, useEffect, useState } from "react";
 import { Context } from "../components/context";
 import { getQuestionByID } from "../APIcalls/Authentication";
@@ -22,19 +26,33 @@ const Quiz = () => {
   const [questionData, setQuestionData] = useState(null);
   const [answer, setAnswer] = useState(null);
   const [score, setScore] = useState(0);
+  const [lifeLineUsed, setLifeLineUsed] = useState({
+    fifthy: {
+      title: "50-50",
+      used: false,
+    },
+    exchange: {
+      title: "Exchange Question",
+      used: false,
+    },
+    expert: {
+      title: "Ask the Expert",
+      used: false,
+    },
+  });
 
   const quizHandler = async () => {
     const { data } = await generateQuiz(username);
     console.log(data);
     setQuizData(data.data);
     setQuestionIdList([...data.data.questions]);
-    console.log("questionIdList", questionIdList);
+    // console.log("questionIdList", questionIdList);
   };
 
   const question = async (questionId) => {
     const { data } = await getQuestionByID(questionId);
     setQuestionData(data.data);
-    console.log("questionData", data);
+    // console.log("questionData", data);
   };
 
   const lockAns = async () => {
@@ -42,7 +60,7 @@ const Quiz = () => {
     const questionId = questionIdList[count].questionId;
     const answerId = answer.id;
     const earnedScore = amountWon[count];
-    console.log("ans", answer);
+    // console.log("ans", answer);
 
     const { data } = await lockAnswer(
       quizId,
@@ -56,6 +74,13 @@ const Quiz = () => {
     } else {
       setOpenGameOver(true);
     }
+  };
+  const LifeLineUse = async (lifeLineType) => {
+    const quizId = quizData.quizId;
+    const questionId = questionIdList[count].questionId;
+
+    const { data } = await useLifeLineAPI(quizId, questionId, lifeLineType);
+    return data;
   };
   // Random component
   const Completionist = () => <span>Game Over!</span>;
@@ -76,7 +101,28 @@ const Quiz = () => {
   };
   const setAnswerHandler = (e) => {
     setAnswer(e);
-    console.log("answer", e, e.text);
+    // console.log("answer", e, e.text);
+  };
+  const lifeLineHandler = async (e) => {
+    const temp = lifeLineUsed;
+    if (e === "fifthy") {
+      const fifty = await LifeLineUse(lifeLineUsed.fifthy.title);
+      setQuestionData(fifty.data);
+      temp.fifthy.used = true;
+    } else if (e === "exchange") {
+      const exchange = await LifeLineUse(lifeLineUsed.exchange.title);
+      const temp1 = questionIdList;
+      temp1[count].questionId = exchange.data._id;
+      setQuestionIdList([...temp1]);
+      setQuestionData(exchange.data);
+      temp.exchange.used = true;
+    } else if (e === "expert") {
+      const expert = await LifeLineUse(lifeLineUsed.expert.title);
+      console.log(expert);
+      temp.expert.used = true;
+    }
+    setLifeLineUsed({ ...temp });
+    console.log({ temp, e });
   };
   useEffect(() => {
     quizHandler();
@@ -90,7 +136,7 @@ const Quiz = () => {
 
   return (
     <div className="Quiz">
-      <GameOverModal />
+      <GameOverModal amount={score} />
       <div className="amount">
         {reversedArrayAmountWon.map((amount) => (
           <p>
@@ -114,7 +160,7 @@ const Quiz = () => {
         </div>
         <p className="ques">{questionData?.question}</p>
         <div className="option">
-          {questionData?.options.map((option) => (
+          {questionData?.options?.map((option) => (
             <div
               className={`${answer?.id === option.id ? "active" : ""}`}
               onClick={() => setAnswerHandler(option)}
@@ -133,14 +179,25 @@ const Quiz = () => {
         <ul>
           <li>
             <div>
-              Fifty-Fifty <button>50:50</button>
+              Fifty-Fifty{" "}
+              <button
+                disabled={lifeLineUsed.fifthy.used}
+                onClick={() => {
+                  lifeLineHandler("fifthy");
+                }}
+              >
+                50:50
+              </button>
             </div>
           </li>
 
           <li>
             <div>
               Flip the question
-              <button>
+              <button
+                disabled={lifeLineUsed.exchange.used}
+                onClick={() => lifeLineHandler("exchange")}
+              >
                 <TbSwitch3 />
               </button>
             </div>
@@ -148,7 +205,10 @@ const Quiz = () => {
           <li>
             <div>
               Ask the Expert
-              <button>
+              <button
+                disabled={lifeLineUsed.expert.used}
+                onClick={() => lifeLineHandler("expert")}
+              >
                 <BsPersonVcardFill />
               </button>
             </div>

@@ -55,3 +55,16 @@ export const getQuestionByID = async (questionId) => {
     console.log(error);
   }
 };
+
+export const useLifeLineAPI = async (quizId, questionId, lifeLineType) => {
+  try {
+    const data = await axios.post(baseURL.url + "/quiz/useLifeLine", {
+      quizId: quizId,
+      questionId: questionId,
+      lifelineType: lifeLineType,
+    });
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};

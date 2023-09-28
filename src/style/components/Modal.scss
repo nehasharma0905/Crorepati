@@ -1,11 +1,45 @@
 .modal {
   .gameoverbox {
-    border-radius: 10px;
-    margin-left: auto;
-    margin-right: auto;
+    border: 1px solid #fdd36a;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #2e335a;
+    max-width: 300px;
+
     .gameoverimage {
-      height: 60%;
-      width: 60%;
+      height: 70%;
+      width: 70%;
+    }
+    #modal-modal-description {
+      color: white;
+      font-size: large;
+      margin-top: 0px !important;
+
+      span {
+        color: #fdd36a;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 30px;
+        font-weight: 600;
+      }
+    }
+    button {
+      width: 120px;
+      height: 40px;
+      margin: 25px;
+      color: black;
+      font-weight: 700;
+      background: #fdd36a;
+      border-radius: 20px;
+      text-align: center;
+      border: 2px solid #2e335a;
+      &:hover {
+        box-shadow: 5px 5px 10px #fdd36a;
+        cursor: pointer;
+      }
     }
   }
 }
