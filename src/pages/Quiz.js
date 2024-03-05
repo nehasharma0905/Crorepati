@@ -112,6 +112,7 @@ const Quiz = () => {
     } else if (e === "exchange") {
       const exchange = await LifeLineUse(lifeLineUsed.exchange.title);
       const temp1 = questionIdList;
+      console.log(exchange, exchange.data);
       temp1[count].questionId = exchange.data._id;
       setQuestionIdList([...temp1]);
       setQuestionData(exchange.data);

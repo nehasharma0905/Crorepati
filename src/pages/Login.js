@@ -27,12 +27,18 @@ const Login = () => {
     setUsername("");
     setPassword("");
     setConfirmPassword("");
-    console.log("useeffect run");
   }, [mode]);
 
   const handleLoginHandler = async () => {
-    const { data } = await loginUser(username, password);
-    if (data.authStatus) {
+    const data = await loginUser(username, password);
+    if (data.status) {
+      navigate("/quiz");
+    }
+    console.log("data", data);
+  };
+  const handleSignUpHandler = async () => {
+    const data = await createUser(username, password);
+    if (data.status) {
       navigate("/quiz");
     }
     console.log("data", data);
@@ -71,7 +77,7 @@ const Login = () => {
           password={password}
           confirmPassword={confirmPassword}
           takeInput={readinput}
-          buttonClicked={createUser}
+          buttonClicked={handleSignUpHandler}
           modeChange={() => setMode("Login")}
         />
       )}
