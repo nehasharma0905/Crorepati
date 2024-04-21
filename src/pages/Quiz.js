@@ -1,17 +1,17 @@
-import { BsCurrencyRupee } from "react-icons/bs";
+import { useContext, useEffect, useState } from "react";
+import { BsCurrencyRupee, BsPersonVcardFill } from "react-icons/bs";
 import { TbSwitch3 } from "react-icons/tb";
-import { BsPersonVcardFill } from "react-icons/bs";
-import Countdown from "react-countdown";
 import {
   generateQuiz,
+  getQuestionByID,
   lockAnswer,
-  useLifeLine,
   useLifeLineAPI,
 } from "../APIcalls/Authentication";
-import { useContext, useEffect, useState } from "react";
-import { Context } from "../components/context";
-import { getQuestionByID } from "../APIcalls/Authentication";
 import GameOverModal from "../components/GameOverModal";
+import { Context } from "../components/context";
+// import { MyTimer } from "../components/timer";
+
+import { useTimer } from "react-timer-hook";
 
 const Quiz = () => {
   const amountWon = [
@@ -26,6 +26,16 @@ const Quiz = () => {
   const [questionData, setQuestionData] = useState(null);
   const [answer, setAnswer] = useState(null);
   const [score, setScore] = useState(0);
+  const [hint, setHint] = useState(null);
+
+  const time = new Date();
+  time.setSeconds(time.getSeconds() + 45);
+
+  const { seconds, minutes, restart } = useTimer({
+    time,
+    // onExpire: () => setOpenGameOver(true),
+  });
+
   const [lifeLineUsed, setLifeLineUsed] = useState({
     fifthy: {
       title: "50-50",
@@ -43,7 +53,6 @@ const Quiz = () => {
 
   const quizHandler = async () => {
     const { data } = await generateQuiz(username);
-    console.log(data);
     setQuizData(data.data);
     setQuestionIdList([...data.data.questions]);
     // console.log("questionIdList", questionIdList);
@@ -52,6 +61,8 @@ const Quiz = () => {
   const question = async (questionId) => {
     const { data } = await getQuestionByID(questionId);
     setQuestionData(data.data);
+    restart(time);
+    setHint(null);
     // console.log("questionData", data);
   };
 
@@ -82,26 +93,13 @@ const Quiz = () => {
     const { data } = await useLifeLineAPI(quizId, questionId, lifeLineType);
     return data;
   };
-  // Random component
-  const Completionist = () => <span>Game Over!</span>;
 
-  // Renderer callback with condition
-  const renderer = ({ minutes, seconds, completed }) => {
-    if (completed) {
-      // Render a complete state
-      return <Completionist />;
-    } else {
-      // Render a countdown
-      return (
-        <span>
-          {minutes}:{seconds}
-        </span>
-      );
-    }
-  };
   const setAnswerHandler = (e) => {
     setAnswer(e);
     // console.log("answer", e, e.text);
+  };
+  const quitGameHandler = () => {
+    setOpenGameOver(true);
   };
   const lifeLineHandler = async (e) => {
     const temp = lifeLineUsed;
@@ -120,6 +118,7 @@ const Quiz = () => {
     } else if (e === "expert") {
       const expert = await LifeLineUse(lifeLineUsed.expert.title);
       console.log(expert);
+      setHint(expert.data.hint);
       temp.expert.used = true;
     }
     setLifeLineUsed({ ...temp });
@@ -139,27 +138,34 @@ const Quiz = () => {
     <div className="Quiz">
       <GameOverModal amount={score} />
       <div className="amount">
-        {reversedArrayAmountWon.map((amount) => (
-          <p>
-            <BsCurrencyRupee />
-            {amount}
+        {reversedArrayAmountWon.map((amount, index) => (
+          <p
+            className={`${count === 16 - index ? "active" : ""} ${
+              index === 0 || index === 6 || index === 11 ? "level" : ""
+            }`}
+          >
+            <div>{16 - index}</div>
+            <div>
+              <BsCurrencyRupee />
+              {amount}
+            </div>
           </p>
         ))}
       </div>
       <div className="question">
         <div className="questionNo">
-          <p>Question {count + 1}</p>
-          <div>
-            <Countdown
-              date={Date.now() + 30000}
-              renderer={renderer}
-              onComplete={() => {
-                setOpenGameOver(true);
-              }}
-            />
-          </div>
+          <p>
+            {" "}
+            <BsCurrencyRupee />
+            {amountWon[count]} Question{" "}
+          </p>
         </div>
-        <p className="ques">{questionData?.question}</p>
+        <div className="ques-box">
+          <p className="ques">{questionData?.question}</p>
+        </div>
+        <div className="timer">
+          <span>{seconds}</span>
+        </div>
         <div className="option">
           {questionData?.options?.map((option) => (
             <div
@@ -170,15 +176,16 @@ const Quiz = () => {
             </div>
           ))}
         </div>
+        <p>{hint}</p>
         <div className="buton">
-          <button>Quit</button>
+          <button onClick={quitGameHandler}>Quit</button>
           <button onClick={lockAns}>Lock Answer</button>
         </div>
       </div>
       <div className="options">
         <p>Life Lines</p>
         <ul>
-          <li>
+          <li className={`${lifeLineUsed.fifthy.used ? "active" : ""}`}>
             <div>
               Fifty-Fifty{" "}
               <button
@@ -192,7 +199,7 @@ const Quiz = () => {
             </div>
           </li>
 
-          <li>
+          <li className={`${lifeLineUsed.exchange.used ? "active" : ""}`}>
             <div>
               Flip the question
               <button
@@ -203,7 +210,7 @@ const Quiz = () => {
               </button>
             </div>
           </li>
-          <li>
+          <li className={`${lifeLineUsed.expert.used ? "active" : ""}`}>
             <div>
               Ask the Expert
               <button
@@ -216,7 +223,10 @@ const Quiz = () => {
           </li>
         </ul>
 
-        <h2>You have currently won</h2>
+        <h2>
+          You have <br />
+          currently won
+        </h2>
         <h1>
           <BsCurrencyRupee />
           {score}
