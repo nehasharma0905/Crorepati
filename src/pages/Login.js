@@ -4,6 +4,11 @@ import SignUpBox from "../components/SignUpBox";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { Context } from "../components/context";
+import {
+  handleSignUp,
+  handleSignOut,
+  handleSignIn,
+} from "../firebase/firebaseAuthHandler";
 const Login = () => {
   const navigate = useNavigate();
   const { username, setUsername } = useContext(Context);
@@ -30,16 +35,16 @@ const Login = () => {
   }, [mode]);
 
   const handleLoginHandler = async () => {
-    const data = await loginUser(username, password);
+    const data = await handleSignIn(username, password);
     if (data.status) {
-      navigate("/quiz");
+      //navigate("/quiz");
     }
     console.log("data", data);
   };
   const handleSignUpHandler = async () => {
-    const data = await createUser(username, password);
+    const data = await handleSignUp(username, password);
     if (data.status) {
-      navigate("/quiz");
+      //navigate("/quiz");
     }
     console.log("data", data);
   };
