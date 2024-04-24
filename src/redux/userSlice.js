@@ -9,7 +9,6 @@
 
 import { createSlice } from "@reduxjs/toolkit";
 
-
 /**
  * Here we have created initial state. These properties are defined based on use-cases. 
  * Always try to keep it simple. If you need more properties, then add them here.
