@@ -1,3 +1,11 @@
+:root {
+  --primary: #2e335a;
+  --secondary: #fdd36a;
+  --white: #fff;
+}
+
+
+
 @mixin heading($fontSize: 35px, $fontWeight: 600) {
   font-family: "Nunito", sans-serif;
   font-weight: $fontWeight;

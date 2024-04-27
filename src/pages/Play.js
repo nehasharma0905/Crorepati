@@ -1,44 +1,15 @@
+import { Box } from "@mui/material";
 import Button from "../components/CustomButton";
 import { useNavigate } from "react-router-dom";
-const Play = () => {
+const MainDashboard = () => {
   const navigate = useNavigate();
   const nav = (link) => {
     navigate(link);
   };
   return (
-    <div className="Play">
-      <h1
-        onClick={() => {
-          nav("Login");
-        }}
-      >
-        KBC
-      </h1>
-      <Button
-        title="Play"
-        navigate={() => {
-          nav("login");
-        }}
-      />
-      <Button
-        title="LeaderBoard"
-        navigate={() => {
-          nav("leaderboard");
-        }}
-      />
-      <Button
-        title="Challenge"
-        navigate={() => {
-          nav("challenge");
-        }}
-      />
-      <Button
-        title="How to Play"
-        navigate={() => {
-          nav("Login");
-        }}
-      />
-    </div>
+    <Box className={'main-dashboard'}>
+
+    </Box>
   );
 };
-export default Play;
+export default MainDashboard;
