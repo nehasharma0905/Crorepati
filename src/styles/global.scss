@@ -1,0 +1,117 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap");
+:root {
+  // can be used to create css variable
+  --dark: #0b1215;
+  --primary: #00dd80;
+  --white: #fff;
+
+  --input-gradient: linear-gradient(
+    170deg,
+    #00dd801f 15%,
+    #02422726 60%,
+    #02422326 70%,
+    #02421426 80%,
+    #00dd801a
+  );
+
+  --button-gradient: linear-gradient(
+    170deg,
+    rgba(0, 221, 128, 0.12) 10%,
+    rgba(2, 66, 39, 0.15) 60%,
+    rgba(2, 66, 35, 0.15) 70%,
+    rgba(2, 66, 20, 0.15) 80%,
+    rgba(0, 221, 128, 0.1) 100%
+  );
+  --gradient-1: linear-gradient(
+    95deg,
+    #02cccc 12.35%,
+    rgba(2, 204, 204, 0.6) 129%
+  );
+  --gradient-2: linear-gradient(
+    141deg,
+    rgba(5, 55, 83, 0.19) 3.22%,
+    rgba(6, 59, 88, 0.19) 56.35%,
+    rgba(4, 17, 40, 0.19) 100%
+  );
+  --gradient-3: linear-gradient(
+    141deg,
+    rgba(2, 204, 204, 0.19) 3.22%,
+    rgba(4, 60, 60, 0.19) 36.13%,
+    rgba(4, 60, 60, 0.19) 54.03%,
+    rgba(4, 60, 60, 0.19) 71.45%,
+    rgba(2, 204, 204, 0.19) 100%
+  );
+  --gradient-text-1: linear-gradient(
+    100deg,
+    rgba(0, 221, 128, 1) -56.17%,
+    rgba(5, 75, 46, 1) 104.26%
+  );
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Space Grotesk", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.gradient-text {
+  background: var(--gradient-text-1);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-glass {
+  background: var(--button-gradient);
+  border: 2px solid rgba(0, 221, 128, 0.25);
+  box-shadow: 0px 8px 20px 0px rgba(30, 30, 30, 0.35);
+}
+
+.gradient-btn {
+  background: linear-gradient(
+    120deg,
+    rgba(0, 221, 128, 1),
+    rgba(5, 75, 46, 1) 80%
+  ) !important;
+  box-shadow: 0px 8px 10px 0px rgba(0, 0, 0, 0.1) !important;
+}
+
+.gradient-input-field {
+  background: var(--input-gradient);
+  border: 1px solid var(--primary);
+}
+
+@mixin flexRow($align: flex-start, $justify: flex-start, $gap: 10px) {
+  display: flex;
+  flex-direction: row;
+  align-items: $align;
+  justify-content: $justify;
+  gap: $gap;
+}
+
+@mixin flexCol($align: flex-start, $justify: flex-start, $gap: 10px) {
+  display: flex;
+  flex-direction: column;
+  align-items: $align;
+  justify-content: $justify;
+  gap: $gap;
+}
+
+@mixin gradient-btn() {
+  @extend .gradient-glass;
+  @include flexRow(center, center, 5px);
+  color: var(--white);
+  padding: 10px 15px;
+  border-radius: 8px;
+  width: max-content;
+}
+
+.App {
+  background-color: var(--dark);
+  height: 100vh;
+  width: 100%;
+}

@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { AppRouter } from "./AppRouter";
-import "./App.css";
+import "./styles/style.scss";
+import { Box } from "@mui/material";
 
 function App() {
   return (
-    <>
+    <Box className="App">
       <AppRouter />
-    </>
+    </Box>
   );
 }
 
