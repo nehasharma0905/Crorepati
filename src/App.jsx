@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { AppRouter } from "./AppRouter";
 import "./styles/style.scss";
 import { Box } from "@mui/material";
