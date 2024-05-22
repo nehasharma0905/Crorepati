@@ -32,7 +32,27 @@ const initialState = {
 export const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    // This is used to define actions that can be performed on the slice
+    // These actions are synchronous.
+    // no async-await
+    /**
+     * Process of reducer
+     * dispatch -> reducer -> store
+     * dispatch is used to call any reducer (both type reducers and async reducers) 
+     * reducer is used to update the state
+     * store is modified according to the reducer
+     */
+
+
+
+
+
+  },
+  extraReducers: () => {
+    // This is used to define extra reducers that can be used in the slice
+    // These reducers are asynchronous.
+  }
 });
 
 export const usersReducer = userSlice.reducer;

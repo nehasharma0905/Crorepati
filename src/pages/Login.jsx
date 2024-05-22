@@ -1,16 +1,36 @@
 import { Box } from "@mui/material";
-import { useState } from "react";
 import {
+  GoogleAuthProvider,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  onAuthStateChanged,
-  GoogleAuthProvider,
   signInWithPopup,
-  signOut,
+  signOut
 } from "firebase/auth";
+import { useState } from "react";
 import { auth } from "../firebase/firebase";
+import {useSelector} from "react-redux";
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
+
+  /**
+   * How to access redux state
+   * Step 1: import useSelector from react-redux
+   * import {useSelector} from "react-redux";
+   * 
+   * Step 2: use useSelector
+   * const user = useSelector((state) => state.user);
+   * 
+   * 
+   * 
+   */
+
+  const userSlice = useSelector((state) => state.user);
+
+  console.log("userSlice.userObject", userSlice.userObject);
+
+  const { userObject } = useSelector((state) => state.user);
+
+  console.log("userObject", userObject);
 
   const [form, setForm] = useState({
     name: "",
