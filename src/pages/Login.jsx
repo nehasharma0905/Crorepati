@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
@@ -8,7 +8,8 @@ import {
 } from "firebase/auth";
 import { useState } from "react";
 import { auth } from "../firebase/firebase";
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
+import { usersAction } from "../redux/userSlice";
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
 
@@ -18,19 +19,37 @@ const Login = () => {
    * import {useSelector} from "react-redux";
    * 
    * Step 2: use useSelector
-   * const user = useSelector((state) => state.user);
+   * const { userObject } = useSelector((state) => state.users);
+   * 
+   * Step 3: using userObject
    * 
    * 
+   * Step 4: update state
+   * Step 4.1
+   * import useDispatch from react-redux
+   * import { useDispatch } from "react-redux";
+   * now create a dispatch variable
+   * const dispatch = useDispatch();
+   * 
+   * Step 4.2 use dispatch with action
    * 
    */
 
-  const userSlice = useSelector((state) => state.user);
-
-  console.log("userSlice.userObject", userSlice.userObject);
-
-  const { userObject } = useSelector((state) => state.user);
+  const { userObject } = useSelector((state) => state.users);
 
   console.log("userObject", userObject);
+
+  const dispatch = useDispatch();
+
+  const handleUserObject = () => {
+   
+    dispatch(usersAction.updateUserObject({
+      name: "Neha",
+    }))
+  }
+  const handleUserObjectAge = () => {
+    dispatch(usersAction.addAge(30));
+  }
 
   const [form, setForm] = useState({
     name: "",
@@ -83,6 +102,9 @@ const Login = () => {
   };
   return (
     <Box className="login-page">
+      <Button onClick={handleUserObject}>Mera button</Button>
+      <Button onClick={handleUserObjectAge}>Mera button 2</Button>
+      <h1>Name: {userObject?.name} {userObject?.age}</h1>
       <h1 className="login-text">{isLogin ? "Login" : "Sign Up"} to Play</h1>
       {isLogin ? null : (
         <input

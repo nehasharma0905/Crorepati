@@ -39,20 +39,26 @@ export const userSlice = createSlice({
     /**
      * Process of reducer
      * dispatch -> reducer -> store
-     * dispatch is used to call any reducer (both type reducers and async reducers) 
+     * dispatch is used to call any reducer (both type reducers and async reducers)
      * reducer is used to update the state
      * store is modified according to the reducer
      */
 
-
-
-
-
+    updateUserObject: (state, action) => {
+      state.userObject = action.payload;
+    },
+    addAge: (state, action) => {
+      state.userObject = {
+        ...state.userObject,
+        age: action.payload,
+      };
+    },
   },
   extraReducers: () => {
     // This is used to define extra reducers that can be used in the slice
     // These reducers are asynchronous.
-  }
+  },
 });
 
 export const usersReducer = userSlice.reducer;
+export const usersAction = userSlice.actions;
