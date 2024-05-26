@@ -6,20 +6,23 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup
 } from "firebase/auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { auth } from "../firebase/firebase";
 import { useDispatch } from "react-redux";
 import { usersAction } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
-
-
+import { testThunk } from "../redux/userThunk";
 
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(testThunk());
+  }, []);
 
   const [form, setForm] = useState({
     name: "",
@@ -51,7 +54,7 @@ const Login = () => {
         dispatch(
           usersAction.updateLoginStatus({
             isLoggedIn: true,
-            user: user.user,
+            user: user,
           })
         )
         setTimeout(() => {
@@ -79,7 +82,7 @@ const Login = () => {
         dispatch(
           usersAction.updateLoginStatus({
             isLoggedIn: true,
-            user: user.user,
+            user: user,
           })
         )
         setTimeout(() => {
@@ -101,9 +104,22 @@ const Login = () => {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       console.log("result", result);
-      setTimeout(() => {
-        setLoading(false);
-      }, 2000);
+      console.log("user", result.user);
+      if (result.user.accessToken) {
+        dispatch(
+          usersAction.updateLoginStatus({
+            isLoggedIn: true,
+            user: result.user,
+          })
+        )
+        setTimeout(() => {
+          setLoading(false);
+          navigate("/");
+        }, 500);
+      }
+      else {
+        console.log("error", result.user);
+      }
     } catch (error) {
       console.log(error.message);
     }
