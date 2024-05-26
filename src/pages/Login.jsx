@@ -11,6 +11,7 @@ import { FcGoogle } from "react-icons/fc";
 import { auth } from "../firebase/firebase";
 import { useDispatch } from "react-redux";
 import { usersAction } from "../redux/userSlice";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -28,6 +29,7 @@ const Login = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate("/");
 
   const handleInput = (identifier, event) => {
     setForm({
@@ -38,7 +40,7 @@ const Login = () => {
   const handleSignUp = async () => {
     try {
       setLoading(true);
-      const user = await createUserWithEmailAndPassword(
+      const {user} = await createUserWithEmailAndPassword(
         auth,
         form.email,
         form.password
@@ -52,10 +54,14 @@ const Login = () => {
             user: user.user,
           })
         )
+        setTimeout(() => {
+          setLoading(false);
+          navigate("/");
+        }, 500);
       }
-      setTimeout(() => {
-        setLoading(false);
-      }, 500);
+      else {
+        console.log("error", user);
+      }
     } catch (error) {
       console.log(error.message);
     }
@@ -63,15 +69,27 @@ const Login = () => {
   const handleSignIn = async () => {
     try {
       setLoading(true);
-      const user = await signInWithEmailAndPassword(
+      const {user} = await signInWithEmailAndPassword(
         auth,
         form.email,
         form.password
       );
       console.log("user", user);
-      setTimeout(() => {
-        setLoading(false);
-      }, 2000);
+      if (user.accessToken) {
+        dispatch(
+          usersAction.updateLoginStatus({
+            isLoggedIn: true,
+            user: user.user,
+          })
+        )
+        setTimeout(() => {
+          setLoading(false);
+          navigate("/");
+        }, 500);
+      }
+      else {
+        console.log("error", user);
+      }
     } catch (error) {
       console.log(error.message);
     }
@@ -154,7 +172,7 @@ const Login = () => {
         </Button>
       )}
       <p className="or">or</p>
-        <Button className="google-btn" loading={loading} onClick={signInWithGoogle}>
+        <Button className="google-btn" onClick={signInWithGoogle}>
         <FcGoogle />
         Login with Google
       </Button>

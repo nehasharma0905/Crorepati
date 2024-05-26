@@ -1,22 +1,15 @@
-import { Navigate, Outlet, Route, Routes } from "react-router-dom";
-import Play from "./pages/Play";
+import { Route, Routes } from "react-router-dom";
+import { RouteProtector } from "./components/RouteProtector";
 import Login from "./pages/Login";
-import { useState } from "react";
-
-const Protector = (props) => {
-  return props.isLoggedIn ? <Outlet /> : <Navigate to="/" />;
-};
+import Play from "./pages/Play";
 
 export const AppRouter = () => {
   return (
     <Routes>
-      <Route path="/" element={<Play />} />
-      <Route path="/login" element={<Login />} />
-
-      <Route path="/4" element={<h1>ShaTi</h1>} />
-      <Route path="/" element={<Protector isLoggedIn={false} />}>
-        
+      <Route path="/" element={<RouteProtector/>}>
+        <Route path="/" element={<Play />} />
       </Route>
+      <Route path="/login" element={<Login />} />
     </Routes>
   );
 };
