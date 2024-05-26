@@ -80,6 +80,18 @@
   box-shadow: 0px 8px 10px 0px rgba(0, 0, 0, 0.1) !important;
 }
 
+.gradient-btn-2 {
+  border: none;
+  padding: 15px 25px;
+  border-radius: 5px;
+  color: var(--white);
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: 0.5px;
+  background: linear-gradient(120deg, #00dd80, #054b2e 80%) !important;
+  box-shadow: 0px 8px 10px 0px rgba(0, 0, 0, 0.1) !important;
+}
+
 .gradient-input-field {
   background: var(--input-gradient);
   border: 1px solid var(--primary);
@@ -112,6 +124,10 @@
 
 .App {
   background-color: var(--dark);
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
+}
+
+button {
+  cursor: pointer;
 }

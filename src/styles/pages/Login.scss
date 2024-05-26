@@ -2,31 +2,82 @@
   color: white;
   @include flexCol(center, center, 5px);
   padding: 50px;
+  min-height: 100vh;
   .login-text {
     font-size: 47px;
     padding: 30px 0px;
     @extend .gradient-text;
   }
-  .login-input {
+  .login-container {
     width: 30%;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    color: var(--secondary);
-    height: 50px;
-    padding: 10px !important;
-    @extend .gradient-input-field;
-  }
-  .LoginButton {
-    @include gradient-btn();
-    margin-bottom: 20px;
-  }
-  .or {
-    margin-bottom: 20px;
-  }
-  .SignUp {
-    margin: 20px 0px;
-  }
-  button {
-    @include flexRow(center, center);
+    @include flexCol(center, center, 25px);
+    .input-container {
+      width: 100%;
+      @include flexCol(center, center, 10px);
+
+      > label {
+        color: #97999c;
+        font-size: 14px;
+        width: 100%;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+      }
+      .login-input {
+        width: 100%;
+        border-radius: 8px;
+        color: var(--secondary);
+        font-size: 16px;
+        height: 50px;
+        padding: 10px !important;
+        @extend .gradient-input-field;
+      }
+    }
+    .forgot-password {
+      font-size: 14px;
+      margin-top: -10px;
+      width: 100%;
+      color: #00dd80;
+    }
+    .LoginButton {
+      margin-top: 15px;
+      width: 100%;
+      @extend .gradient-btn-2;
+    }
+    .or {
+      width: 100%;
+      @include flexRow(center, center);
+      margin-bottom: 20px;
+      opacity: 0.5;
+      color: #97999c;
+      &::before,
+      &::after {
+        content: "";
+        display: block;
+        width: 50%;
+        height: 1px;
+        background-color: #97999c;
+      }
+    }
+    .google-btn {
+      @include gradient-btn();
+      @include flexRow(center, center, 15px);
+      width: 100%;
+      padding: 15px 25px;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.25px;
+    }
+    .SignUp {
+      width: 100%;
+      color: #97999c;
+      font-weight: 500;
+      letter-spacing: 0.25px;
+      span {
+        font-weight: 500;
+        color: #00dd80;
+        letter-spacing: 0.25px;
+        cursor: pointer;
+      }
+    }
   }
 }

@@ -1,55 +1,24 @@
-import { Box, Button } from "@mui/material";
+import { Button } from "@mui/joy";
+import { Box } from "@mui/material";
 import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signInWithPopup,
-  signOut
+  signInWithPopup
 } from "firebase/auth";
 import { useState } from "react";
+import { FcGoogle } from "react-icons/fc";
 import { auth } from "../firebase/firebase";
-import {useSelector, useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import { usersAction } from "../redux/userSlice";
+
+
+
+
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
 
-  /**
-   * How to access redux state
-   * Step 1: import useSelector from react-redux
-   * import {useSelector} from "react-redux";
-   * 
-   * Step 2: use useSelector
-   * const { userObject } = useSelector((state) => state.users);
-   * 
-   * Step 3: using userObject
-   * 
-   * 
-   * Step 4: update state
-   * Step 4.1
-   * import useDispatch from react-redux
-   * import { useDispatch } from "react-redux";
-   * now create a dispatch variable
-   * const dispatch = useDispatch();
-   * 
-   * Step 4.2 use dispatch with action
-   * 
-   */
-
-  const { userObject } = useSelector((state) => state.users);
-
-  console.log("userObject", userObject);
-
   const dispatch = useDispatch();
-
-  const handleUserObject = () => {
-   
-    dispatch(usersAction.updateUserObject({
-      name: "Neha",
-    }))
-  }
-  const handleUserObjectAge = () => {
-    dispatch(usersAction.addAge(30));
-  }
 
   const [form, setForm] = useState({
     name: "",
@@ -57,6 +26,9 @@ const Login = () => {
     password: "",
     confirmPassword: "",
   });
+
+  const [loading, setLoading] = useState(false);
+
   const handleInput = (identifier, event) => {
     setForm({
       ...form,
@@ -65,71 +37,102 @@ const Login = () => {
   };
   const handleSignUp = async () => {
     try {
+      setLoading(true);
       const user = await createUserWithEmailAndPassword(
         auth,
         form.email,
         form.password
       );
       console.log("user", user);
+      if (user.accessToken) {
+        console.log("user", user);
+        dispatch(
+          usersAction.updateLoginStatus({
+            isLoggedIn: true,
+            user: user.user,
+          })
+        )
+      }
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
     } catch (error) {
       console.log(error.message);
     }
   };
   const handleSignIn = async () => {
     try {
+      setLoading(true);
       const user = await signInWithEmailAndPassword(
         auth,
         form.email,
         form.password
       );
       console.log("user", user);
+      setTimeout(() => {
+        setLoading(false);
+      }, 2000);
     } catch (error) {
       console.log(error.message);
     }
   };
-  const handleSignOut = async () => {
-    await signOut(auth);
-  };
 
   const signInWithGoogle = async () => {
     try {
+      setLoading(true);
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       console.log("result", result);
+      setTimeout(() => {
+        setLoading(false);
+      }, 2000);
     } catch (error) {
       console.log(error.message);
     }
   };
   return (
     <Box className="login-page">
-      <Button onClick={handleUserObject}>Mera button</Button>
-      <Button onClick={handleUserObjectAge}>Mera button 2</Button>
-      <h1>Name: {userObject?.name} {userObject?.age}</h1>
       <h1 className="login-text">{isLogin ? "Login" : "Sign Up"} to Play</h1>
+      <Box className={'login-container'}>
+
+      
       {isLogin ? null : (
+        <Box className={'input-container'}>
+          <label>User Name</label>
         <input
           value={form.name}
           type="text"
           placeholder="Enter Name"
           className="login-input"
           onChange={(event) => handleInput("name", event)}
-        />
-      )}
+          />
+          </Box>
+        )}
+        
+        <Box className={'input-container'}>
+
+      <label>Email</label>
       <input
         value={form.email}
         type="text"
-        placeholder="Enter email"
+        placeholder="Enter Email"
         className="login-input"
         onChange={(event) => handleInput("email", event)}
       />
+        </Box>
+        <Box className={'input-container'}>
+      <label>Password</label>
       <input
         value={form.password}
         type="password"
         placeholder="Enter Password"
         className="login-input"
         onChange={(event) => handleInput("password", event)}
-      />
+        />
+        </Box>
       {isLogin ? null : (
+        <Box className={'input-container'}>
+        <label>Confirm Password</label>
         <input
           value={form.confirmPassword}
           type="password"
@@ -137,26 +140,27 @@ const Login = () => {
           className="login-input"
           onChange={(event) => handleInput("confirmPassword", event)}
         />
+        </Box>
       )}
 
-      <p>Forgot Password?</p>
+      <p className="forgot-password" >Forgot Password?</p>
       {isLogin ? (
-        <button className="LoginButton" onClick={handleSignIn}>
+        <Button className="LoginButton" onClick={handleSignIn} loading={loading}>
           Login
-        </button>
+        </Button>
       ) : (
-        <button className="LoginButton" onClick={handleSignUp}>
+        <Button className="LoginButton" onClick={handleSignUp} loading={loading}>
           SignUp
-        </button>
+        </Button>
       )}
       <p className="or">or</p>
-      <button>
-        <span>G</span>
+        <Button className="google-btn" loading={loading} onClick={signInWithGoogle}>
+        <FcGoogle />
         Login with Google
-      </button>
+      </Button>
       {isLogin ? (
         <p className="SignUp">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <span onClick={() => setIsLogin(false)}>Sign Up here</span>
         </p>
       ) : (
@@ -164,7 +168,8 @@ const Login = () => {
           Already have an account?{" "}
           <span onClick={() => setIsLogin(true)}>Sign In here</span>
         </p>
-      )}
+        )}
+        </Box>
     </Box>
   );
 };

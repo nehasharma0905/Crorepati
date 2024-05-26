@@ -23,35 +23,13 @@ const initialState = {
   error: null,
 };
 
-/**
- * createSlice is a function from @reduxjs/toolkit that is used to create slices.
- * It takes an object as an argument that has name and initialState. Only name and an initialState is required.
- * all other properties are optional. Name is used to identify the slice and initialState is the initial state of the slice.
- */
-
 export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    // This is used to define actions that can be performed on the slice
-    // These actions are synchronous.
-    // no async-await
-    /**
-     * Process of reducer
-     * dispatch -> reducer -> store
-     * dispatch is used to call any reducer (both type reducers and async reducers)
-     * reducer is used to update the state
-     * store is modified according to the reducer
-     */
-
-    updateUserObject: (state, action) => {
-      state.userObject = action.payload;
-    },
-    addAge: (state, action) => {
-      state.userObject = {
-        ...state.userObject,
-        age: action.payload,
-      };
+   updateLoginStatus: (state, action) => {
+      state.isUserLoggedIn = action.payload.isLoggedIn;
+      state.userObject = action.payload.user;
     },
   },
   extraReducers: () => {
