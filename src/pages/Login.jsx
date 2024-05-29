@@ -4,25 +4,32 @@ import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signInWithPopup
+  signInWithPopup,
 } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
-import { auth } from "../firebase/firebase";
+// import { auth } from "../firebase/firebase";
 import { useDispatch } from "react-redux";
 import { usersAction } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
 import { testThunk } from "../redux/userThunk";
-
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(testThunk());
-  }, []);
+  // const isLoggedIn = useMemo(async () => {
+  //   const user = await auth.currentUser;
+  //   if (user) return true;
+  //   else false;
+  // }, [auth]);
+
+  // useEffect(() => {
+  //   if (isLoggedIn) {
+  //     dispatch(testThunk());
+  //   }
+  // }, [isLoggedIn]);
 
   const [form, setForm] = useState({
     name: "",
@@ -43,7 +50,7 @@ const Login = () => {
   const handleSignUp = async () => {
     try {
       setLoading(true);
-      const {user} = await createUserWithEmailAndPassword(
+      const { user } = await createUserWithEmailAndPassword(
         auth,
         form.email,
         form.password
@@ -56,13 +63,12 @@ const Login = () => {
             isLoggedIn: true,
             user: user,
           })
-        )
+        );
         setTimeout(() => {
           setLoading(false);
           navigate("/");
         }, 500);
-      }
-      else {
+      } else {
         console.log("error", user);
       }
     } catch (error) {
@@ -72,7 +78,7 @@ const Login = () => {
   const handleSignIn = async () => {
     try {
       setLoading(true);
-      const {user} = await signInWithEmailAndPassword(
+      const { user } = await signInWithEmailAndPassword(
         auth,
         form.email,
         form.password
@@ -84,13 +90,12 @@ const Login = () => {
             isLoggedIn: true,
             user: user,
           })
-        )
+        );
         setTimeout(() => {
           setLoading(false);
           navigate("/");
         }, 500);
-      }
-      else {
+      } else {
         console.log("error", user);
       }
     } catch (error) {
@@ -111,13 +116,12 @@ const Login = () => {
             isLoggedIn: true,
             user: result.user,
           })
-        )
+        );
         setTimeout(() => {
           setLoading(false);
           navigate("/");
         }, 500);
-      }
-      else {
+      } else {
         console.log("error", result.user);
       }
     } catch (error) {
@@ -127,83 +131,89 @@ const Login = () => {
   return (
     <Box className="login-page">
       <h1 className="login-text">{isLogin ? "Login" : "Sign Up"} to Play</h1>
-      <Box className={'login-container'}>
-
-      
-      {isLogin ? null : (
-        <Box className={'input-container'}>
-          <label>User Name</label>
-        <input
-          value={form.name}
-          type="text"
-          placeholder="Enter Name"
-          className="login-input"
-          onChange={(event) => handleInput("name", event)}
-          />
+      <Box className={"login-container"}>
+        <Button onClick={() => dispatch(testThunk())}>Test</Button>
+        {isLogin ? null : (
+          <Box className={"input-container"}>
+            <label>User Name</label>
+            <input
+              value={form.name}
+              type="text"
+              placeholder="Enter Name"
+              className="login-input"
+              onChange={(event) => handleInput("name", event)}
+            />
           </Box>
         )}
-        
-        <Box className={'input-container'}>
 
-      <label>Email</label>
-      <input
-        value={form.email}
-        type="text"
-        placeholder="Enter Email"
-        className="login-input"
-        onChange={(event) => handleInput("email", event)}
-      />
+        <Box className={"input-container"}>
+          <label>Email</label>
+          <input
+            value={form.email}
+            type="text"
+            placeholder="Enter Email"
+            className="login-input"
+            onChange={(event) => handleInput("email", event)}
+          />
         </Box>
-        <Box className={'input-container'}>
-      <label>Password</label>
-      <input
-        value={form.password}
-        type="password"
-        placeholder="Enter Password"
-        className="login-input"
-        onChange={(event) => handleInput("password", event)}
-        />
+        <Box className={"input-container"}>
+          <label>Password</label>
+          <input
+            value={form.password}
+            type="password"
+            placeholder="Enter Password"
+            className="login-input"
+            onChange={(event) => handleInput("password", event)}
+          />
         </Box>
-      {isLogin ? null : (
-        <Box className={'input-container'}>
-        <label>Confirm Password</label>
-        <input
-          value={form.confirmPassword}
-          type="password"
-          placeholder="Confirm Password"
-          className="login-input"
-          onChange={(event) => handleInput("confirmPassword", event)}
-        />
-        </Box>
-      )}
-
-      <p className="forgot-password" >Forgot Password?</p>
-      {isLogin ? (
-        <Button className="LoginButton" onClick={handleSignIn} loading={loading}>
-          Login
-        </Button>
-      ) : (
-        <Button className="LoginButton" onClick={handleSignUp} loading={loading}>
-          SignUp
-        </Button>
-      )}
-      <p className="or">or</p>
-        <Button className="google-btn" onClick={signInWithGoogle}>
-        <FcGoogle />
-        Login with Google
-      </Button>
-      {isLogin ? (
-        <p className="SignUp">
-          Don&apos;t have an account?{" "}
-          <span onClick={() => setIsLogin(false)}>Sign Up here</span>
-        </p>
-      ) : (
-        <p className="SignUp">
-          Already have an account?{" "}
-          <span onClick={() => setIsLogin(true)}>Sign In here</span>
-        </p>
+        {isLogin ? null : (
+          <Box className={"input-container"}>
+            <label>Confirm Password</label>
+            <input
+              value={form.confirmPassword}
+              type="password"
+              placeholder="Confirm Password"
+              className="login-input"
+              onChange={(event) => handleInput("confirmPassword", event)}
+            />
+          </Box>
         )}
-        </Box>
+
+        <p className="forgot-password">Forgot Password?</p>
+        {isLogin ? (
+          <Button
+            className="LoginButton"
+            onClick={handleSignIn}
+            loading={loading}
+          >
+            Login
+          </Button>
+        ) : (
+          <Button
+            className="LoginButton"
+            onClick={handleSignUp}
+            loading={loading}
+          >
+            SignUp
+          </Button>
+        )}
+        <p className="or">or</p>
+        <Button className="google-btn" onClick={signInWithGoogle}>
+          <FcGoogle />
+          Login with Google
+        </Button>
+        {isLogin ? (
+          <p className="SignUp">
+            Don&apos;t have an account?{" "}
+            <span onClick={() => setIsLogin(false)}>Sign Up here</span>
+          </p>
+        ) : (
+          <p className="SignUp">
+            Already have an account?{" "}
+            <span onClick={() => setIsLogin(true)}>Sign In here</span>
+          </p>
+        )}
+      </Box>
     </Box>
   );
 };
