@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { AppRouter } from "./AppRouter";
 import "./styles/style.scss";
 import { Box } from "@mui/material";
-import { testApi } from "./api/test";
+import { testApi } from "./api/sampleApi";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase/firebase";
 import { useDispatch, useSelector } from "react-redux";
