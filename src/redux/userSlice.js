@@ -8,7 +8,6 @@
  */
 
 import { createSlice } from "@reduxjs/toolkit";
-import { testThunk } from "./userThunk";
 
 /**
  * Here we have created initial state. These properties are defined based on use-cases.
@@ -34,22 +33,7 @@ export const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // This is used to define extra reducers that can be used in the slice
-    // These reducers are asynchronous.
-
-    builder
-      .addCase(testThunk.pending, (state) => {
-      state.isLoading = true;
-    })
-      .addCase(testThunk.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.userObject = action.payload;
-      state.isUserLoggedIn = true;
-      })
-      .addCase(testThunk.rejected, (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    })
+    
   },
 });
 

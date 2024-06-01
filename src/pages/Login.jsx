@@ -6,13 +6,12 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
-// import { auth } from "../firebase/firebase";
 import { useDispatch } from "react-redux";
-import { usersAction } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
-import { testThunk } from "../redux/userThunk";
+import { auth } from "../firebase/firebase";
+import { usersAction } from "../redux/userSlice";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -132,7 +131,6 @@ const Login = () => {
     <Box className="login-page">
       <h1 className="login-text">{isLogin ? "Login" : "Sign Up"} to Play</h1>
       <Box className={"login-container"}>
-        <Button onClick={() => dispatch(testThunk())}>Test</Button>
         {isLogin ? null : (
           <Box className={"input-container"}>
             <label>User Name</label>
