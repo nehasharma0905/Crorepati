@@ -12,8 +12,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase/firebase";
 import { usersAction } from "../redux/userSlice";
-import {userLogin } from "../api/authApi";
-import { signUpThunk } from "../redux/userThunk";
+import { userLogin } from "../api/authApi";
+import { loginThunk, signUpThunk } from "../redux/userThunk";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -80,14 +80,7 @@ const Login = () => {
       );
       console.log("user", user);
       if (user.accessToken) {
-        const LoginResponse = await userLogin();
-        console.log("LoginResponse", LoginResponse);
-        dispatch(
-          usersAction.updateLoginStatus({
-            isLoggedIn: true,
-            user: user,
-          })
-        );
+        void dispatch(loginThunk());
         setTimeout(() => {
           setLoading(false);
           navigate("/");
