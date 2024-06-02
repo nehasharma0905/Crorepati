@@ -12,7 +12,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase/firebase";
 import { usersAction } from "../redux/userSlice";
-import { SignUp, LoginUser } from "../api/authApi";
+import {userLogin } from "../api/authApi";
+import { signUpThunk } from "../redux/userThunk";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -57,15 +58,7 @@ const Login = () => {
       );
       console.log("user", user);
       if (user.accessToken) {
-        console.log("user", user);
-        const signUpResponse = await SignUp(form.name);
-        console.log("signUpResponse", signUpResponse);
-        dispatch(
-          usersAction.updateLoginStatus({
-            isLoggedIn: true,
-            user: user,
-          })
-        );
+        void dispatch(signUpThunk(form.name));
         setTimeout(() => {
           setLoading(false);
           navigate("/");
@@ -87,7 +80,7 @@ const Login = () => {
       );
       console.log("user", user);
       if (user.accessToken) {
-        const LoginResponse = await LoginUser();
+        const LoginResponse = await userLogin();
         console.log("LoginResponse", LoginResponse);
         dispatch(
           usersAction.updateLoginStatus({

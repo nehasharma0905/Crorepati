@@ -8,6 +8,7 @@
  */
 
 import { createSlice } from "@reduxjs/toolkit";
+import { signUpThunk } from "./userThunk";
 
 /**
  * Here we have created initial state. These properties are defined based on use-cases.
@@ -33,7 +34,16 @@ export const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    
+    builder.addCase(signUpThunk.pending, (state) => {
+      state.isLoading = true;
+    }).addCase(signUpThunk.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isUserLoggedIn = true;
+      state.userObject = action.payload;
+    }).addCase(signUpThunk.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
   },
 });
 
