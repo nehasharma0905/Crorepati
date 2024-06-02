@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase/firebase";
 import { usersAction } from "../redux/userSlice";
-import { SignUp } from "../api/authApi";
+import { SignUp, LoginUser } from "../api/authApi";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -87,6 +87,8 @@ const Login = () => {
       );
       console.log("user", user);
       if (user.accessToken) {
+        const LoginResponse = await LoginUser();
+        console.log("LoginResponse", LoginResponse);
         dispatch(
           usersAction.updateLoginStatus({
             isLoggedIn: true,
