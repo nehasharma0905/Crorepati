@@ -1,5 +1,8 @@
 # React + Vite
 
+
+#### [Access Figma Design Here](https://www.figma.com/design/TJx2TEUDKf3siOIRdcrLQp/KBC-new?node-id=0-1&t=BIPAYEqvI8EvkA0f-0)
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:

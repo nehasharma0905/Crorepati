@@ -12,25 +12,12 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase/firebase";
 import { usersAction } from "../redux/userSlice";
-import { userLogin } from "../api/authApi";
 import { loginThunk, signUpThunk } from "../redux/userThunk";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
 
   const dispatch = useDispatch();
-
-  // const isLoggedIn = useMemo(async () => {
-  //   const user = await auth.currentUser;
-  //   if (user) return true;
-  //   else false;
-  // }, [auth]);
-
-  // useEffect(() => {
-  //   if (isLoggedIn) {
-  //     dispatch(testThunk());
-  //   }
-  // }, [isLoggedIn]);
 
   const [form, setForm] = useState({
     name: "",
@@ -58,7 +45,7 @@ const Login = () => {
       );
       console.log("user", user);
       if (user.accessToken) {
-        void dispatch(signUpThunk(form.name));
+        await dispatch(signUpThunk(form.name));
         setTimeout(() => {
           setLoading(false);
           navigate("/");
@@ -80,7 +67,7 @@ const Login = () => {
       );
       console.log("user", user);
       if (user.accessToken) {
-        void dispatch(loginThunk());
+        await dispatch(loginThunk());
         setTimeout(() => {
           setLoading(false);
           navigate("/");
