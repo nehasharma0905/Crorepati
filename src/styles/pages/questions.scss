@@ -1,0 +1,194 @@
+.questions-page {
+  width: 100%;
+  min-height: 100vh;
+  padding: 25px;
+  .questions-container {
+    width: 100%;
+    min-height: calc(100vh - 50px);
+    padding: 47px 25px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 50px;
+
+    background-image: linear-gradient(
+      135deg,
+      rgba(0, 221, 129, 0),
+      rgba(0, 221, 129, 0.2)
+    );
+    border: 2px solid #054b2e;
+    border-radius: 6px;
+    .amount {
+      color: #e8e8e8;
+      width: 16%;
+      height: 100%;
+      ul {
+        height: 100%;
+        list-style: none;
+        li {
+          padding: 2px 10px;
+          border-radius: 4px;
+          margin-bottom: 7px;
+          background-image: linear-gradient(
+            135deg,
+            //rgba(0, 221, 129, 0),
+            rgba(7, 102, 56, 0.5),
+            rgba(4, 49, 17, 0.4)
+          );
+          svg {
+            margin-right: 8px;
+          }
+        }
+      }
+    }
+    .question {
+      width: 80%;
+      @include flexCol(center, flex-start, 25px);
+      .life-line {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        h1 {
+          color: white;
+          font-size: 20px;
+        }
+        button {
+          padding: 3px 15px;
+          border-radius: 5px;
+          color: white;
+          font-size: 14px;
+          @extend .gradient-input-field;
+        }
+      }
+      .clock {
+        color: #0ca565;
+        font-size: 40px;
+        font-weight: 900;
+        margin: 18px 0px;
+      }
+      .question-text {
+        text-align: center;
+        color: white;
+        font-size: 15px;
+        width: calc(100% - 200px);
+        margin-bottom: 20px;
+      }
+      .option {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        row-gap: 20px;
+        column-gap: 50px;
+        margin-bottom: 40px;
+        .option-text {
+          color: white;
+          font-size: 16px;
+          font-weight: 500;
+          padding: 10px 80px;
+          background-image: linear-gradient(
+            135deg,
+            //rgba(0, 221, 129, 0),
+            rgba(7, 102, 56, 0.5),
+            rgba(4, 49, 17, 0.4)
+          );
+          border: 2px solid #054b2e;
+          border-radius: 4px;
+          cursor: pointer;
+          &:hover {
+            background-image: linear-gradient(
+              135deg,
+              rgba(0, 221, 129, 0.1),
+              rgba(0, 221, 129, 0.2)
+            );
+          }
+        }
+      }
+      .lifelinebox {
+        width: 100%;
+        padding: 13px 30px;
+        background-color: #0b1215;
+        border: 2px solid #0ca565;
+        border-radius: 4px;
+        .lifelinebox-header {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 14px;
+          p {
+            color: #0ca565;
+            font-size: 15px;
+            font-weight: 500;
+          }
+          svg {
+            cursor: pointer;
+            color: white;
+          }
+        }
+        .lifelinebox-text {
+          padding: 0px 13px;
+          color: white;
+          font-size: 13px;
+          font-weight: 300;
+        }
+      }
+      .lock-btn {
+        border-radius: 5px;
+        color: white;
+        font-size: 16px;
+        padding: 10px 20px;
+        @extend .gradient-input-field;
+      }
+    }
+  }
+}
+.lifeline-box-modal {
+  position: absolute;
+  padding: 30px 50px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400;
+  border: 2px solid #000;
+  background-color: #0b1215;
+  border: 2px solid #0ca565;
+  border-radius: 10px;
+  @include flexCol(center, center, 20px);
+  h1 {
+    color: #0ca565;
+    font-size: 22px;
+    font-weight: 500;
+  }
+  ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 20px;
+    column-gap: 50px;
+    li {
+      border: 2px solid #0ca565;
+      color: white;
+      font-size: 14px;
+      font-weight: 300;
+      padding: 15px 50px;
+      border-radius: 5px;
+      @include flexRow(center, center, 10px);
+    }
+  }
+  .lifeline-description {
+    h3 {
+      color: white;
+      font-size: 15px;
+      font-weight: 500;
+    }
+    p {
+      color: white;
+      font-size: 14px;
+      font-weight: 300;
+    }
+  }
+  button {
+    @include gradient-btn();
+  }
+}
