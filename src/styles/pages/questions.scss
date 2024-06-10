@@ -121,6 +121,7 @@
             font-size: 15px;
             font-weight: 500;
           }
+
           svg {
             cursor: pointer;
             color: white;
@@ -131,6 +132,29 @@
           color: white;
           font-size: 13px;
           font-weight: 300;
+          margin-bottom: 10px;
+        }
+        .audiencePoll {
+          width: 100%;
+          color: #0ca565;
+          display: flex;
+          @include flexCol(center, center, 15px);
+          .progress-container {
+            width: 80%;
+            @include flexRow(center, flex-start, 10px);
+            span {
+              color: #fff;
+            }
+            .progress {
+              width: 100%;
+              height: 10px;
+              background-color: #063622;
+              border-radius: 5px;
+              .MuiLinearProgress-bar {
+                background-color: #0ca565;
+              }
+            }
+          }
         }
       }
       .lock-btn {

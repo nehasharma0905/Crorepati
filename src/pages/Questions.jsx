@@ -3,16 +3,29 @@ import { FaCoins } from "react-icons/fa";
 import { useState } from "react";
 import { IoClose } from "react-icons/io5";
 import Modal from "@mui/material/Modal";
+import LinearProgress from "@mui/material/LinearProgress";
 
 const Questions = () => {
   const amount = [
     1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 20000, 30000,
     40000, 50000, 60000,
   ];
+  const lifeLineDescription = {
+    "Flip Question":
+      "flipQuestionshdga dhgqf djqhwgruq d hqwr xasqjhr qghwefuq2 asd hqwgd asdsdvuqye dhjrgr addqhgr huewr",
+    "50-50":
+      "50-50shdga dhgqf djqhwgruq d hqwr xasqjhr qghwefuq2 asd hqwgd asdsdvuqye dhjrgr addqhgr huewr",
+    "Audience Poll":
+      "AudiencePollshdga dhgqf djqhwgruq d hqwr xasqjhr qghwefuq2 asd hqwgd asdsdvuqye dhjrgr addqhgr huewr",
+    "Ask Expert":
+      "AskExpertshdga dhgqf djqhwgruq d hqwr xasqjhr qghwefuq2 asd hqwgd asdsdvuqye dhjrgr addqhgr huewr",
+  };
+  const [activeLifeline, setActiveLifeline] = useState("");
   const [lifelinebox, setLifelinebox] = useState(true);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
   return (
     <Box className="questions-page">
       <Modal
@@ -24,17 +37,18 @@ const Questions = () => {
         <Box className="lifeline-box-modal">
           <h1>Use Life Lines</h1>
           <ul>
-            <li>Flip Question</li>
-            <li>50-50</li>
-            <li>Audience Poll</li>
-            <li>Ask Expert</li>
+            <li onClick={() => setActiveLifeline("Flip Question")}>
+              Flip Question
+            </li>
+            <li onClick={() => setActiveLifeline("50-50")}>50-50</li>
+            <li onClick={() => setActiveLifeline("Audience Poll")}>
+              Audience Poll
+            </li>
+            <li onClick={() => setActiveLifeline("Ask Expert")}>Ask Expert</li>
           </ul>
           <Box className="lifeline-description">
-            <h3>About Life Lines</h3>
-            <p>
-              shdga dhgqf djqhwgruq d hqwr xasqjhr qghwefuq2 asd hqwgd
-              asdsdvuqye dhjrgr addqhgr huewr
-            </p>
+            <h3>About {activeLifeline}:</h3>
+            <p>{lifeLineDescription[activeLifeline]}</p>
           </Box>
           <button> Confirm </button>
         </Box>
@@ -72,7 +86,7 @@ const Questions = () => {
           {lifelinebox ? (
             <Box className="lifelinebox">
               <div className="lifelinebox-header">
-                <p>Ask Expert</p>
+                <p>{activeLifeline}</p>
                 <IoClose onClick={() => setLifelinebox(false)} />
               </div>
               <p className="lifelinebox-text">
@@ -84,6 +98,40 @@ const Questions = () => {
                 that allows writers to concentrate without unnecessary
                 distractions.
               </p>
+              <Box className="audiencePoll">
+                <Box className={"progress-container"}>
+                  <span>A</span>
+                  <LinearProgress
+                    className="progress"
+                    variant="determinate"
+                    value={30}
+                  />
+                </Box>
+                <Box className={"progress-container"}>
+                  <span>B</span>
+                  <LinearProgress
+                    className="progress"
+                    variant="determinate"
+                    value={20}
+                  />
+                </Box>
+                <Box className={"progress-container"}>
+                  <span>C</span>
+                  <LinearProgress
+                    className="progress"
+                    variant="determinate"
+                    value={40}
+                  />
+                </Box>
+                <Box className={"progress-container"}>
+                  <span>D</span>
+                  <LinearProgress
+                    className="progress"
+                    variant="determinate"
+                    value={10}
+                  />
+                </Box>
+              </Box>
             </Box>
           ) : null}
 
