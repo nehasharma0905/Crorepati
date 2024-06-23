@@ -8,6 +8,7 @@
   }
   .all-options {
     @include flexCol(center, center, 40px);
+    list-style: none;
     .play-button {
       @include gradient-btn();
       width: 250px;

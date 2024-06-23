@@ -21,7 +21,7 @@ import { loginThunk } from "./userThunk";
 const initialState = {
   isUserLoggedIn: false,
   userObject: null,
-  isLoading: false,
+  isLoading: true,
   error: null,
 };
 
@@ -32,6 +32,9 @@ export const userSlice = createSlice({
     updateLoginStatus: (state, action) => {
       state.isUserLoggedIn = action.payload.isLoggedIn;
       state.userObject = action.payload.user;
+    },
+    setLoading: (state, action) => {
+      state.isLoading = action.payload;
     },
   },
   extraReducers: (builder) => {

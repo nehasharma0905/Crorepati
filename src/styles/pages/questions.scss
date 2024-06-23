@@ -22,11 +22,27 @@
       color: #e8e8e8;
       width: 16%;
       height: 100%;
+      @include flexCol(flex-start, flex-start, 20px);
+      > button {
+        @include flexRow(center, center, 10px);
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        @extend .gradient-input-field;
+        svg {
+          font-size: 20px;
+          transform: rotate(180deg);
+        }
+      }
       ul {
+        width: 100%;
         height: 100%;
         list-style: none;
         li {
-          padding: 2px 10px;
+          padding: 10px;
           border-radius: 4px;
           margin-bottom: 7px;
           background-image: linear-gradient(
@@ -37,6 +53,13 @@
           );
           svg {
             margin-right: 8px;
+          }
+          &.active {
+            border: 2px solid #fdd36a;
+            color: #fdd36a;
+            svg {
+              color: #fdd36a;
+            }
           }
         }
       }

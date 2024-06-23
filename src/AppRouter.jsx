@@ -9,9 +9,9 @@ export const AppRouter = () => {
     <Routes>
       <Route path="/" element={<RouteProtector />}>
         <Route path="/" element={<Play />} />
+        <Route path="/questions" element={<Questions />} />
       </Route>
       <Route path="/login" element={<Login />} />
-      <Route path="/questions" element={<Questions />} />
     </Routes>
   );
 };

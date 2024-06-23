@@ -6,9 +6,9 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase/firebase";
 import { usersAction } from "../redux/userSlice";
@@ -28,6 +28,8 @@ const Login = () => {
 
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate("/");
+
+  const {userObject,isLoading} = useSelector((state)=>state.users)
 
   const handleInput = (identifier, event) => {
     setForm({
@@ -105,6 +107,18 @@ const Login = () => {
       console.log(error.message);
     }
   };
+
+
+  useEffect(() => {
+    if(userObject && !isLoading){
+      navigate("/")
+    }
+  },[isLoading, navigate, userObject])
+
+
+
+
+
   return (
     <Box className="login-page">
       <h1 className="login-text">{isLogin ? "Login" : "Sign Up"} to Play</h1>

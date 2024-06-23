@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { usersReducer } from "./userSlice";
+import { quizReducer } from "./quizSlice";
 
 /**
  * This is a store file, for better management of state in redux, store can be divided in slices.
@@ -14,5 +15,6 @@ import { usersReducer } from "./userSlice";
 export const store = configureStore({
   reducer: {
     users: usersReducer,
+    quiz : quizReducer,
   },
 });

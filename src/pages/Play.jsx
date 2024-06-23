@@ -1,13 +1,42 @@
-import { Box } from "@mui/material";
-import coinImg from './../../public/assets/coin.png';
 import { Button } from "@mui/joy";
+import { Box } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { generateGame } from "../api/quizApi";
+import { auth } from "../firebase/firebase";
+import { quizActions } from "../redux/quizSlice";
+import { getNextQuestionThunk } from "../redux/quizThunk";
+import coinImg from './../../public/assets/coin.png';
 const Play = () => {
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+
+  const handleLogout = () => {
+    console.log("logout");
+    auth.signOut();
+  }
+
+  const handlePlay = async() => {
+    try {
+      console.log("play");
+      const newQuiz = await generateGame();
+      console.log("newQuiz", newQuiz);
+      dispatch(quizActions.setQuiz(newQuiz.data));
+      dispatch(getNextQuestionThunk(newQuiz.data.id));
+      navigate("/questions");
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
+
   return (
     <Box className={'play-page'}>
       <img src={coinImg} alt="logo" className="logo" />
       <ul className={'all-options'}>
         <li>
-          <Button className="play-button">Play</Button>
+          <Button className="play-button" onClick={handlePlay}>Play</Button>
         </li>
         <li>
           <Button className="play-button">Leaderboard</Button>
@@ -16,7 +45,7 @@ const Play = () => {
           <Button className="play-button">Challenge a friend</Button>
         </li>
         <li>
-          <Button className="play-button">Logout</Button>
+          <Button className="play-button" onClick={handleLogout}>Logout</Button>
         </li>
       </ul>
 
