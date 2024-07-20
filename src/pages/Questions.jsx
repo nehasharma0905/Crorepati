@@ -11,24 +11,26 @@ import { useTimer } from "react-timer-hook";
 import { Button } from "@mui/joy";
 import { IoMdExit } from "react-icons/io";
 import { quizActions } from "../redux/quizSlice";
+import { getCorrectAnswer } from "../api/quizApi";
+import { getNextQuestionThunk } from "../redux/quizThunk";
 
- const amount = [
-    70000000, 50000000, 20000000, 10000000, 8000000, 5000000, 2000000, 1000000, 500000, 100000, 50000, 20000, 10000, 5000, 1000,
-  ];
+const amount = [
+  70000000, 50000000, 20000000, 10000000, 8000000, 5000000, 2000000, 1000000,
+  500000, 100000, 50000, 20000, 10000, 5000, 1000,
+];
 
 const Questions = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
-
-  const {totalSeconds, isRunning, start, pause, resume, restart} = useTimer({
+  const { totalSeconds, isRunning, start, pause, resume, restart } = useTimer({
     expiryTimestamp: 1000 * 60 * 2,
     onExpire: () => {
       console.warn("onExpire");
     },
-  })
- 
+  });
+
   const lifeLineDescription = {
     "Flip Question":
       "flipQuestionshdga dhgqf djqhwgruq d hqwr xasqjhr qghwefuq2 asd hqwgd asdsdvuqye dhjrgr addqhgr huewr",
@@ -45,35 +47,47 @@ const Questions = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const { activeQuestionData, quiz, questionStatus } = useSelector(
+    (state) => state.quiz
+  );
 
-  const { activeQuestionData, quiz, questionStatus } = useSelector((state) => state.quiz)
-  
   useEffect(() => {
     if (!quiz) {
-      navigate("/")
+      navigate("/");
     }
-  }, [navigate, quiz])
-  
+  }, [navigate, quiz]);
+
   useEffect(() => {
     if (activeQuestionData) {
       const newTime = activeQuestionData.timeLimit;
       const time = new Date();
       time.setSeconds(time.getSeconds() + newTime);
-      restart(time, true)
+      restart(time, true);
     }
-  }, [activeQuestionData, quiz, restart])
-
+  }, [activeQuestionData, quiz, restart]);
 
   const activeQuestionNumber = useMemo(() => {
     if (activeQuestionData) {
-      return amount.findIndex((price) => price === activeQuestionData.price)
+      return amount.findIndex((price) => price === activeQuestionData.price);
     }
-  }, [activeQuestionData])
-  
+  }, [activeQuestionData]);
+
+  const markAnswer = async (answerId) => {
+    const { data } = await getCorrectAnswer(
+      quiz.id,
+      activeQuestionData.id,
+      answerId
+    );
+    console.log(data);
+    if (data.isCorrect) {
+      dispatch(getNextQuestionThunk(quiz.id));
+    }
+  };
+
   const handleQuit = () => {
     dispatch(quizActions.clearQuizSlice());
-    navigate("/")
-  }
+    navigate("/");
+  };
 
   return (
     <Box className="questions-page">
@@ -104,89 +118,101 @@ const Questions = () => {
       </Modal>
       <Box className="questions-container">
         <Box className="amount">
-          <button onClick={handleQuit}><IoMdExit />Quit </button>
+          <button onClick={handleQuit}>
+            <IoMdExit />
+            Quit{" "}
+          </button>
           <ul>
             {amount.map((e, index) => (
-              <li key={e} className={activeQuestionNumber === index ? 'active': ''}>
+              <li
+                key={e}
+                className={activeQuestionNumber === index ? "active" : ""}
+              >
                 <FaCoins />
                 {e}
               </li>
             ))}
           </ul>
         </Box>
-        {activeQuestionData ? (<Box className="question">
-          <Box className="life-line">
-            <h1>Question {(15-activeQuestionNumber)}</h1>
-            <button onClick={handleOpen}>Use Life Line</button>
-          </Box>
-          <h1 className="clock">{totalSeconds}</h1>
-          <p className="question-text">
-            {activeQuestionData.question}
-          </p>
-          <Box className="option">
-            {
-              activeQuestionData.options.map((option, index) => (
-                <Box className="option-text" key={option.id}>{option.text}</Box>
-              ))
-            }
-          </Box>
-          {lifelinebox ? (
-            <Box className="lifelinebox">
-              <div className="lifelinebox-header">
-                <p>{activeLifeline}</p>
-                <IoClose onClick={() => setLifelinebox(false)} />
-              </div>
-              <p className="lifelinebox-text">
-                Writebox is a text editor designed with simplicity and
-                distraction-free writing. While many applications tend to become
-                feature-rich and complex over time, Writebox takes a different
-                approach. Writebox continues to focus on the essential features
-                required for writing on a computer, providing an environment
-                that allows writers to concentrate without unnecessary
-                distractions.
-              </p>
-              <Box className="audiencePoll">
-                <Box className={"progress-container"}>
-                  <span>A</span>
-                  <LinearProgress
-                    className="progress"
-                    variant="determinate"
-                    value={30}
-                  />
+        {activeQuestionData ? (
+          <Box className="question">
+            <Box className="life-line">
+              <h1>Question {15 - activeQuestionNumber}</h1>
+              <button onClick={handleOpen}>Use Life Line</button>
+            </Box>
+            <h1 className="clock">{totalSeconds}</h1>
+            <p className="question-text">{activeQuestionData.question}</p>
+            <Box className="option">
+              {activeQuestionData.options.map((option, index) => (
+                <Box
+                  onClick={() => markAnswer(option.id)}
+                  className="option-text"
+                  key={option.id}
+                >
+                  {option.text}
                 </Box>
-                <Box className={"progress-container"}>
-                  <span>B</span>
-                  <LinearProgress
-                    className="progress"
-                    variant="determinate"
-                    value={20}
-                  />
-                </Box>
-                <Box className={"progress-container"}>
-                  <span>C</span>
-                  <LinearProgress
-                    className="progress"
-                    variant="determinate"
-                    value={40}
-                  />
-                </Box>
-                <Box className={"progress-container"}>
-                  <span>D</span>
-                  <LinearProgress
-                    className="progress"
-                    variant="determinate"
-                    value={10}
-                  />
+              ))}
+            </Box>
+            {lifelinebox ? (
+              <Box className="lifelinebox">
+                <div className="lifelinebox-header">
+                  <p>{activeLifeline}</p>
+                  <IoClose onClick={() => setLifelinebox(false)} />
+                </div>
+                <p className="lifelinebox-text">
+                  Writebox is a text editor designed with simplicity and
+                  distraction-free writing. While many applications tend to
+                  become feature-rich and complex over time, Writebox takes a
+                  different approach. Writebox continues to focus on the
+                  essential features required for writing on a computer,
+                  providing an environment that allows writers to concentrate
+                  without unnecessary distractions.
+                </p>
+                <Box className="audiencePoll">
+                  <Box className={"progress-container"}>
+                    <span>A</span>
+                    <LinearProgress
+                      className="progress"
+                      variant="determinate"
+                      value={30}
+                    />
+                  </Box>
+                  <Box className={"progress-container"}>
+                    <span>B</span>
+                    <LinearProgress
+                      className="progress"
+                      variant="determinate"
+                      value={20}
+                    />
+                  </Box>
+                  <Box className={"progress-container"}>
+                    <span>C</span>
+                    <LinearProgress
+                      className="progress"
+                      variant="determinate"
+                      value={40}
+                    />
+                  </Box>
+                  <Box className={"progress-container"}>
+                    <span>D</span>
+                    <LinearProgress
+                      className="progress"
+                      variant="determinate"
+                      value={10}
+                    />
+                  </Box>
                 </Box>
               </Box>
-            </Box>
-          ) : null}
+            ) : null}
 
-          <button className="lock-btn">Lock Answer</button>
-        </Box>) : questionStatus.isLoading ? <Loader /> : null}
+            <button className="lock-btn">Lock Answer</button>
+          </Box>
+        ) : questionStatus.isLoading ? (
+          <Loader />
+        ) : null}
       </Box>
     </Box>
-  )
+  );
 };
 
 export default Questions;
