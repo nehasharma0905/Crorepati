@@ -11,8 +11,9 @@ import { useTimer } from "react-timer-hook";
 import { Button } from "@mui/joy";
 import { IoMdExit } from "react-icons/io";
 import { quizActions } from "../redux/quizSlice";
-import { getCorrectAnswer } from "../api/quizApi";
+import { getCorrectAnswer, getLifeLineStatus } from "../api/quizApi";
 import { getNextQuestionThunk } from "../redux/quizThunk";
+import { gameOverStatus } from "../api/quizApi";
 
 const amount = [
   70000000, 50000000, 20000000, 10000000, 8000000, 5000000, 2000000, 1000000,
@@ -26,7 +27,8 @@ const Questions = () => {
 
   const { totalSeconds, isRunning, start, pause, resume, restart } = useTimer({
     expiryTimestamp: 1000 * 60 * 2,
-    onExpire: () => {
+    onExpire: async () => {
+      await gameOverStatus(quiz.id, "timeOut");
       console.warn("onExpire");
     },
   });
@@ -44,7 +46,10 @@ const Questions = () => {
   const [activeLifeline, setActiveLifeline] = useState("");
   const [lifelinebox, setLifelinebox] = useState(true);
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    setOpen(true);
+    pause();
+  };
   const handleClose = () => setOpen(false);
 
   const { activeQuestionData, quiz, questionStatus } = useSelector(
@@ -73,6 +78,7 @@ const Questions = () => {
   }, [activeQuestionData]);
 
   const markAnswer = async (answerId) => {
+    pause();
     const { data } = await getCorrectAnswer(
       quiz.id,
       activeQuestionData.id,
@@ -81,14 +87,51 @@ const Questions = () => {
     console.log(data);
     if (data.isCorrect) {
       dispatch(getNextQuestionThunk(quiz.id));
+    } else {
+      await gameOverStatus(quiz.id, "wrongAnswer");
     }
   };
 
-  const handleQuit = () => {
+  const handleQuit = async () => {
+    await gameOverStatus(quiz.id, "quit");
     dispatch(quizActions.clearQuizSlice());
     navigate("/");
   };
 
+  const useLifeline = async () => {
+    let lifeLineId = "";
+    if (activeLifeline) {
+      switch (activeLifeline) {
+        case "Flip Question": {
+          lifeLineId = "exchangeQuestion";
+          break;
+        }
+
+        case "50-50": {
+          lifeLineId = "FiftyFifty";
+          break;
+        }
+        case "Audience Poll": {
+          lifeLineId = "AudiencePoll";
+          break;
+        }
+        case "Ask Expert": {
+          lifeLineId = "AskExpert";
+          break;
+        }
+        default:
+          break;
+      }
+      if (lifeLineId) {
+        const { data } = await getLifeLineStatus(
+          quiz.id,
+          activeQuestionData.id,
+          lifeLineId
+        );
+        console.log("data", data);
+      }
+    }
+  };
   return (
     <Box className="questions-page">
       <Modal
@@ -113,7 +156,7 @@ const Questions = () => {
             <h3>About {activeLifeline}:</h3>
             <p>{lifeLineDescription[activeLifeline]}</p>
           </Box>
-          <button> Confirm </button>
+          <button onClick={useLifeline}> Confirm </button>
         </Box>
       </Modal>
       <Box className="questions-container">

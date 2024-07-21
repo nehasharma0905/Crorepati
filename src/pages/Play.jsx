@@ -6,19 +6,18 @@ import { generateGame } from "../api/quizApi";
 import { auth } from "../firebase/firebase";
 import { quizActions } from "../redux/quizSlice";
 import { getNextQuestionThunk } from "../redux/quizThunk";
-import coinImg from './../../public/assets/coin.png';
+import coinImg from "./../../public/assets/coin.png";
 const Play = () => {
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-
-  const handleLogout = () => {
+  const handleLogout = async () => {
     console.log("logout");
-    auth.signOut();
-  }
+    await auth.signOut();
+    window.location.reload();
+  };
 
-  const handlePlay = async() => {
+  const handlePlay = async () => {
     try {
       console.log("play");
       const newQuiz = await generateGame();
@@ -29,14 +28,16 @@ const Play = () => {
     } catch (error) {
       console.log("error", error);
     }
-  }
+  };
 
   return (
-    <Box className={'play-page'}>
+    <Box className={"play-page"}>
       <img src={coinImg} alt="logo" className="logo" />
-      <ul className={'all-options'}>
+      <ul className={"all-options"}>
         <li>
-          <Button className="play-button" onClick={handlePlay}>Play</Button>
+          <Button className="play-button" onClick={handlePlay}>
+            Play
+          </Button>
         </li>
         <li>
           <Button className="play-button">Leaderboard</Button>
@@ -45,10 +46,11 @@ const Play = () => {
           <Button className="play-button">Challenge a friend</Button>
         </li>
         <li>
-          <Button className="play-button" onClick={handleLogout}>Logout</Button>
+          <Button className="play-button" onClick={handleLogout}>
+            Logout
+          </Button>
         </li>
       </ul>
-
     </Box>
   );
 };
