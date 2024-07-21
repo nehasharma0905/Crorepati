@@ -12,7 +12,7 @@ import { Button } from "@mui/joy";
 import { IoMdExit } from "react-icons/io";
 import { quizActions } from "../redux/quizSlice";
 import { getCorrectAnswer, getLifeLineStatus } from "../api/quizApi";
-import { getNextQuestionThunk } from "../redux/quizThunk";
+import { getLifeLineUsedThunk, getNextQuestionThunk } from "../redux/quizThunk";
 import { gameOverStatus } from "../api/quizApi";
 
 const amount = [
@@ -123,12 +123,13 @@ const Questions = () => {
           break;
       }
       if (lifeLineId) {
-        const { data } = await getLifeLineStatus(
-          quiz.id,
-          activeQuestionData.id,
-          lifeLineId
+        dispatch(
+          getLifeLineUsedThunk({
+            gameId: quiz.id,
+            questionId: activeQuestionData.id,
+            lifeLineId: lifeLineId,
+          })
         );
-        console.log("data", data);
       }
     }
   };
