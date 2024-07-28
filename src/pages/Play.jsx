@@ -23,6 +23,7 @@ const Play = () => {
       const newQuiz = await generateGame();
       console.log("newQuiz", newQuiz);
       dispatch(quizActions.setQuiz(newQuiz.data));
+      dispatch(quizActions.setLifeLine(newQuiz.data.lifelines));
       dispatch(getNextQuestionThunk(newQuiz.data.id));
       navigate("/questions");
     } catch (error) {

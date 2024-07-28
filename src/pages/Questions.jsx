@@ -44,7 +44,7 @@ const Questions = () => {
       "AskExpertshdga dhgqf djqhwgruq d hqwr xasqjhr qghwefuq2 asd hqwgd asdsdvuqye dhjrgr addqhgr huewr",
   };
   const [activeLifeline, setActiveLifeline] = useState("");
-  const [lifelinebox, setLifelinebox] = useState(true);
+  const [lifelinebox, setLifelinebox] = useState(false);
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -52,17 +52,22 @@ const Questions = () => {
   };
   const handleClose = () => setOpen(false);
 
-  const { activeQuestionData, quiz, questionStatus } = useSelector(
-    (state) => state.quiz
-  );
+  const {
+    activeQuestionData,
+    quiz,
+    questionStatus,
+    lifeLineData,
+    lifeLineDetails,
+  } = useSelector((state) => state.quiz);
 
   useEffect(() => {
     if (!quiz) {
       navigate("/");
     }
   }, [navigate, quiz]);
-
+  //doubt
   useEffect(() => {
+    pause();
     if (activeQuestionData) {
       const newTime = activeQuestionData.timeLimit;
       const time = new Date();
@@ -70,6 +75,27 @@ const Questions = () => {
       restart(time, true);
     }
   }, [activeQuestionData, quiz, restart]);
+
+  const lifeLineStatus = useMemo(() => {
+    if (lifeLineDetails) {
+      let status = {
+        type: lifeLineDetails.lifelineId,
+      };
+      if (status.type === "AskExpert" || status.type === "AudiencePoll") {
+        status.show = true;
+        if (status.type === "AskExpert") {
+          status.data = lifeLineDetails.hint;
+        } else {
+          status.data = lifeLineDetails.stats;
+        }
+      } else {
+        status.show = false;
+      }
+      return status;
+    } else {
+      return null;
+    }
+  }, [lifeLineDetails]);
 
   const activeQuestionNumber = useMemo(() => {
     if (activeQuestionData) {
@@ -99,38 +125,14 @@ const Questions = () => {
   };
 
   const useLifeline = async () => {
-    let lifeLineId = "";
     if (activeLifeline) {
-      switch (activeLifeline) {
-        case "Flip Question": {
-          lifeLineId = "exchangeQuestion";
-          break;
-        }
-
-        case "50-50": {
-          lifeLineId = "FiftyFifty";
-          break;
-        }
-        case "Audience Poll": {
-          lifeLineId = "AudiencePoll";
-          break;
-        }
-        case "Ask Expert": {
-          lifeLineId = "AskExpert";
-          break;
-        }
-        default:
-          break;
-      }
-      if (lifeLineId) {
-        dispatch(
-          getLifeLineUsedThunk({
-            gameId: quiz.id,
-            questionId: activeQuestionData.id,
-            lifeLineId: lifeLineId,
-          })
-        );
-      }
+      dispatch(
+        getLifeLineUsedThunk({
+          gameId: quiz.id,
+          questionId: activeQuestionData.id,
+          lifeLineId: activeLifeline,
+        })
+      );
     }
   };
   return (
@@ -144,14 +146,15 @@ const Questions = () => {
         <Box className="lifeline-box-modal">
           <h1>Use Life Lines</h1>
           <ul>
-            <li onClick={() => setActiveLifeline("Flip Question")}>
-              Flip Question
-            </li>
-            <li onClick={() => setActiveLifeline("50-50")}>50-50</li>
-            <li onClick={() => setActiveLifeline("Audience Poll")}>
-              Audience Poll
-            </li>
-            <li onClick={() => setActiveLifeline("Ask Expert")}>Ask Expert</li>
+            {lifeLineData?.map((e) => (
+              <li
+                onClick={() => {
+                  if (!e.used) setActiveLifeline(e.name);
+                }}
+              >
+                {e.name}
+              </li>
+            ))}
           </ul>
           <Box className="lifeline-description">
             <h3>About {activeLifeline}:</h3>
@@ -197,59 +200,32 @@ const Questions = () => {
                 </Box>
               ))}
             </Box>
-            {lifelinebox ? (
+            {lifeLineStatus?.show ? (
               <Box className="lifelinebox">
                 <div className="lifelinebox-header">
                   <p>{activeLifeline}</p>
                   <IoClose onClick={() => setLifelinebox(false)} />
                 </div>
-                <p className="lifelinebox-text">
-                  Writebox is a text editor designed with simplicity and
-                  distraction-free writing. While many applications tend to
-                  become feature-rich and complex over time, Writebox takes a
-                  different approach. Writebox continues to focus on the
-                  essential features required for writing on a computer,
-                  providing an environment that allows writers to concentrate
-                  without unnecessary distractions.
-                </p>
-                <Box className="audiencePoll">
-                  <Box className={"progress-container"}>
-                    <span>A</span>
-                    <LinearProgress
-                      className="progress"
-                      variant="determinate"
-                      value={30}
-                    />
+                {lifeLineStatus.type === "AskExpert" ? (
+                  <p className="lifelinebox-text">{lifeLineStatus.data}</p>
+                ) : (
+                  <Box className="audiencePoll">
+                    {lifeLineStatus.data.map((e) => (
+                      <Box className={"progress-container"} key={e.id}>
+                        <span>{e.text}</span>
+                        <LinearProgress
+                          className="progress"
+                          variant="determinate"
+                          value={e.percentage * 100}
+                        />
+                      </Box>
+                    ))}
                   </Box>
-                  <Box className={"progress-container"}>
-                    <span>B</span>
-                    <LinearProgress
-                      className="progress"
-                      variant="determinate"
-                      value={20}
-                    />
-                  </Box>
-                  <Box className={"progress-container"}>
-                    <span>C</span>
-                    <LinearProgress
-                      className="progress"
-                      variant="determinate"
-                      value={40}
-                    />
-                  </Box>
-                  <Box className={"progress-container"}>
-                    <span>D</span>
-                    <LinearProgress
-                      className="progress"
-                      variant="determinate"
-                      value={10}
-                    />
-                  </Box>
-                </Box>
+                )}
               </Box>
             ) : null}
 
-            <button className="lock-btn">Lock Answer</button>
+            {/* <button className="lock-btn">Lock Answer</button> */}
           </Box>
         ) : questionStatus.isLoading ? (
           <Loader />

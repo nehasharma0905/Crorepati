@@ -15,8 +15,9 @@ const initialState = {
     isLoading: false,
     error: null,
   },
+  lifeLineDetails: null,
 };
-
+//doubt
 const quizSlice = createSlice({
   name: "quiz",
   initialState,
@@ -24,6 +25,10 @@ const quizSlice = createSlice({
     setQuiz: (state, action) => {
       state.quiz = action.payload;
     },
+    setLifeLine: (state, action) => {
+      state.lifeLineData = action.payload;
+    },
+
     clearQuizSlice: (state) => {
       state.quiz = initialState.quiz;
       state.activeQuestionData = initialState.activeQuestionData;
@@ -48,6 +53,7 @@ const quizSlice = createSlice({
     builder
       .addCase(getNextQuestionThunk.pending, (state) => {
         state.questionStatus.isLoading = true;
+        state.lifeLineDetails = null;
       })
       .addCase(getNextQuestionThunk.fulfilled, (state, action) => {
         state.questionStatus.isLoading = false;
@@ -66,8 +72,25 @@ const quizSlice = createSlice({
         switch (action.payload.lifelineId) {
           case "FiftyFifty": {
             state.activeQuestionData.options = action.payload.options;
+            break;
+          }
+          case "AudiencePoll": {
+            state.lifeLineDetails = action.payload;
+            break;
+          }
+          case "exchangeQuestion": {
+            state.activeQuestionData = action.payload.newQuestion;
+            break;
+          }
+          case "AskExpert": {
+            state.lifeLineDetails = action.payload;
+            break;
           }
         }
+        const index = state.lifeLineData.findIndex((e) => {
+          return action.payload.lifelineId === e.name;
+        });
+        state.lifeLineData[index].used = true;
       })
       .addCase(getLifeLineUsedThunk.rejected, (state, action) => {
         state.questionStatus.isLoading = false;

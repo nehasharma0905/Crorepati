@@ -11,12 +11,11 @@ import { usersAction } from "./redux/userSlice";
 import { useNavigate } from "react-router-dom";
 
 function App() {
-
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {isLoading, userObject}= useSelector((state)=>state.users)
+  const { isLoading, userObject } = useSelector((state) => state.users);
 
+  //doubt
   useEffect(() => {
     if (!userObject) {
       onAuthStateChanged(auth, (user) => {
@@ -25,18 +24,13 @@ function App() {
           void dispatch(loginThunk());
         } else {
           dispatch(usersAction.setLoading(false));
-          navigate("/login")
+          navigate("/login");
         }
-      }
-      )
+      });
     }
-  },[dispatch, navigate, userObject])
+  }, [dispatch, navigate, userObject]);
 
-  return (
-    <Box className="App">
-      {isLoading? <Loader/> : <AppRouter />}
-    </Box>
-  );
+  return <Box className="App">{isLoading ? <Loader /> : <AppRouter />}</Box>;
 }
 
 export default App;
