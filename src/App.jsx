@@ -30,7 +30,11 @@ function App() {
     }
   }, [dispatch, navigate, userObject]);
 
-  return <Box className="App">{isLoading ? <Loader /> : <AppRouter />}</Box>;
+  return (
+    <Box className="App">
+      {isLoading ? <Loader className={"main-page-loader"} /> : <AppRouter />}
+    </Box>
+  );
 }
 
 export default App;

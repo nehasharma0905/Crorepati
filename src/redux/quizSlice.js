@@ -4,7 +4,6 @@ import {
   getLifeLineUsedThunk,
   getNextQuestionThunk,
 } from "./quizThunk";
-import { clear } from "localforage";
 
 const initialState = {
   quiz: null,
@@ -72,13 +71,14 @@ const quizSlice = createSlice({
         switch (action.payload.lifelineId) {
           case "FiftyFifty": {
             state.activeQuestionData.options = action.payload.options;
+            state.activeQuestionData.timeLimit = action.payload.timeLimit;
             break;
           }
           case "AudiencePoll": {
             state.lifeLineDetails = action.payload;
             break;
           }
-          case "exchangeQuestion": {
+          case "ExchangeQuestion": {
             state.activeQuestionData = action.payload.newQuestion;
             break;
           }

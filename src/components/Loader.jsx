@@ -3,7 +3,7 @@ import { Grid } from "react-loader-spinner"
 
 export const Loader = (props) => {
     return (
-        <Box className={`loader ${props.className}`}>
+        <Box className={`loader ${props.className ?? ""}`}>
             <Grid
                 visible={true}
                 height="80"

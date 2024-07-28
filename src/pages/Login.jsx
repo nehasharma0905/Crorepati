@@ -104,7 +104,7 @@ const Login = () => {
         console.log("error", result.user);
       }
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
     }
   };
 

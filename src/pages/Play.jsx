@@ -7,9 +7,14 @@ import { auth } from "../firebase/firebase";
 import { quizActions } from "../redux/quizSlice";
 import { getNextQuestionThunk } from "../redux/quizThunk";
 import coinImg from "./../../public/assets/coin.png";
+import { useCallback, useState } from "react";
+
+
 const Play = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const [loading, setLoading] = useState(false);
 
   const handleLogout = async () => {
     console.log("logout");
@@ -17,26 +22,28 @@ const Play = () => {
     window.location.reload();
   };
 
-  const handlePlay = async () => {
+  const handlePlay =  useCallback(async () => {
     try {
-      console.log("play");
+      setLoading(true);
       const newQuiz = await generateGame();
-      console.log("newQuiz", newQuiz);
       dispatch(quizActions.setQuiz(newQuiz.data));
       dispatch(quizActions.setLifeLine(newQuiz.data.lifelines));
-      dispatch(getNextQuestionThunk(newQuiz.data.id));
+      await dispatch(getNextQuestionThunk(newQuiz.data.id));
+      setLoading(false);
       navigate("/questions");
     } catch (error) {
-      console.log("error", error);
+      console.log("error occurred while creating quiz", error);
     }
-  };
+  }, [dispatch, navigate]);
 
   return (
     <Box className={"play-page"}>
       <img src={coinImg} alt="logo" className="logo" />
       <ul className={"all-options"}>
         <li>
-          <Button className="play-button" onClick={handlePlay}>
+          <Button className="play-button"
+            onClick={handlePlay}
+            loading={loading}>
             Play
           </Button>
         </li>
